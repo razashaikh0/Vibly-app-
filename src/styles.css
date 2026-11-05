@@ -1,0 +1,445 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch.
+ * All colors MUST use oklch format.
+ *
+ * To add a new semantic color:
+ * 1. Add the variable to :root (light value) and .dark (dark value)
+ * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 1.1rem;
+  --background: oklch(0.17 0.028 250);
+  --foreground: oklch(0.97 0.015 230);
+  --card: oklch(0.225 0.033 250);
+  --card-foreground: oklch(0.97 0.015 230);
+  --popover: oklch(0.225 0.033 250);
+  --popover-foreground: oklch(0.97 0.015 230);
+  --primary: oklch(0.76 0.13 192);
+  --primary-foreground: oklch(0.17 0.03 240);
+  --primary-glow: oklch(0.66 0.19 258);
+  --secondary: oklch(0.28 0.038 250);
+  --secondary-foreground: oklch(0.94 0.02 220);
+  --muted: oklch(0.27 0.032 250);
+  --muted-foreground: oklch(0.74 0.028 225);
+  --accent: oklch(0.63 0.2 263);
+  --accent-foreground: oklch(0.97 0.015 230);
+  --destructive: oklch(0.62 0.21 22);
+  --destructive-foreground: oklch(0.98 0.01 230);
+  --border: oklch(0.32 0.04 248);
+  --input: oklch(0.32 0.04 248);
+  --ring: oklch(0.76 0.13 192);
+  --gold: oklch(0.84 0.13 196);
+  --chart-1: oklch(0.76 0.13 192);
+  --chart-2: oklch(0.63 0.2 263);
+  --chart-3: oklch(0.84 0.13 196);
+  --chart-4: oklch(0.7 0.15 300);
+  --chart-5: oklch(0.72 0.15 150);
+  --sidebar: oklch(0.2 0.03 250);
+  --sidebar-foreground: oklch(0.97 0.015 230);
+  --sidebar-primary: oklch(0.76 0.13 192);
+  --sidebar-primary-foreground: oklch(0.17 0.03 240);
+  --sidebar-accent: oklch(0.28 0.038 250);
+  --sidebar-accent-foreground: oklch(0.94 0.02 220);
+  --sidebar-border: oklch(0.32 0.04 248);
+  --sidebar-ring: oklch(0.76 0.13 192);
+  --gradient-brand: linear-gradient(120deg, oklch(0.72 0.14 196), oklch(0.63 0.2 263) 100%);
+  --gradient-gold: linear-gradient(120deg, oklch(0.86 0.13 198), oklch(0.7 0.16 232));
+  /* Accent families, all derived from the aqua/electric-blue pair. */
+  --gradient-royal: linear-gradient(120deg, oklch(0.58 0.2 285), oklch(0.68 0.16 250));
+  --gradient-sky: linear-gradient(120deg, oklch(0.63 0.2 263), oklch(0.78 0.12 210));
+  --gradient-ember: linear-gradient(120deg, oklch(0.66 0.19 15), oklch(0.76 0.15 42));
+  --gradient-mint: linear-gradient(120deg, oklch(0.74 0.14 178), oklch(0.8 0.13 160));
+  --shadow-card: 0 14px 34px -20px oklch(0.06 0.04 240 / 0.9);
+  --shadow-elevated: 0 24px 54px -26px oklch(0.06 0.04 240 / 0.95);
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  /* Layout rhythm shared by every page shell. */
+  --space-page: 1rem;
+  --space-section: 1.25rem;
+  --nav-height: 4.25rem;
+}
+
+.dark {
+  --background: oklch(0.15 0.026 250);
+}
+
+@theme inline {
+  --color-gold: var(--gold);
+  --color-primary-glow: var(--primary-glow);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --spacing-page: var(--space-page);
+  --spacing-section: var(--space-section);
+  --spacing-nav: var(--nav-height);
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1rem;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-eyebrow--font-weight: 700;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    background-image:
+      radial-gradient(55rem 32rem at 8% -12%, oklch(0.76 0.13 192 / 0.16), transparent 62%),
+      radial-gradient(45rem 28rem at 100% -4%, oklch(0.63 0.2 263 / 0.2), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--card) 88%, transparent);
+  backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  box-shadow: var(--shadow-card);
+}
+
+@utility brand-gradient {
+  background-image: var(--gradient-brand);
+}
+
+@utility gold-gradient {
+  background-image: var(--gradient-gold);
+}
+
+@utility royal-gradient {
+  background-image: var(--gradient-royal);
+}
+
+@utility sky-gradient {
+  background-image: var(--gradient-sky);
+}
+
+@utility ember-gradient {
+  background-image: var(--gradient-ember);
+}
+
+@utility mint-gradient {
+  background-image: var(--gradient-mint);
+}
+
+/* --- Shared page chrome ------------------------------------------------- */
+
+/** Standard page wrapper: consistent max width, gutters and nav clearance. */
+@utility page-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 64rem;
+  padding-inline: var(--space-page);
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 1.5rem);
+}
+
+/** Indigo gradient app bar used at the top of every primary page. */
+@utility app-header {
+  background-image: var(--gradient-brand);
+  color: var(--primary-foreground);
+  border-bottom-left-radius: var(--radius-3xl);
+  border-bottom-right-radius: var(--radius-3xl);
+  box-shadow: var(--shadow-elevated);
+  padding-inline: var(--space-page);
+  padding-top: calc(env(safe-area-inset-top) + 0.75rem);
+  padding-bottom: 1.25rem;
+}
+
+/** Pill filter/category chip. Pair with .chip-active for the selected state. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+@utility chip-active {
+  border-color: transparent;
+  background-image: var(--gradient-brand);
+  color: var(--primary-foreground);
+  box-shadow: var(--shadow-card);
+}
+
+/** Elevated white surface used for cards, sheets and list rows. */
+@utility surface-card {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+}
+
+@utility room-stage {
+  background:
+    radial-gradient(32rem 18rem at 50% -10%, oklch(0.76 0.13 192 / 0.12), transparent 70%),
+    color-mix(in oklab, var(--card) 82%, transparent);
+  border: 1px solid color-mix(in oklab, var(--primary) 18%, var(--border));
+  box-shadow: var(--shadow-elevated);
+}
+
+@utility room-controls {
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+@utility room-chat {
+  box-shadow: var(--shadow-elevated);
+}
+
+/** Full-bleed celebration banner shell (red packet, big gift, VIP entry). */
+@utility fx-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  padding: 0.75rem 1.25rem;
+  color: var(--primary-foreground);
+  box-shadow: var(--shadow-elevated);
+  border: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+}
+
+@keyframes speak-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.7 0.2 145 / 0.75);
+  }
+  50% {
+    box-shadow: 0 0 0 8px oklch(0.7 0.2 145 / 0);
+  }
+}
+
+@keyframes gift-fly {
+  0% {
+    transform: translateY(30px) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0) scale(1.15);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-10px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-70px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes fx-slide-in {
+  0% {
+    transform: translateY(-24px) scale(0.94);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fx-pop {
+  0% {
+    transform: scale(0.3) rotate(-15deg);
+  }
+  60% {
+    transform: scale(1.35) rotate(8deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes fx-shake {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes fx-rain {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(90px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fx-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(220%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+/* ---- Level frames, wave bars and shop jewellery animations ---- */
+@keyframes frame-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes frame-shine {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(1 0 0 / 0);
+  }
+  50% {
+    box-shadow: 0 0 10px 2px oklch(0.95 0.05 95 / 0.55);
+  }
+}
+
+@keyframes wave-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes ring-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes ring-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes gem-sparkle {
+  0%,
+  100% {
+    filter: brightness(1);
+    transform: rotate(45deg) scale(1);
+  }
+  50% {
+    filter: brightness(1.35);
+    transform: rotate(45deg) scale(1.08);
+  }
+}
+
+@keyframes sparkle-pop {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes entry-sweep {
+  0% {
+    transform: translateX(-110%);
+    opacity: 0;
+  }
+  15%,
+  70% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,2 @@
+REVOKE EXECUTE ON FUNCTION public.fx_rate_ok(uuid, text, integer, integer) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.log_fx(uuid, uuid, text, text, text, text, text, text, bigint, integer) FROM PUBLIC, anon, authenticated;
