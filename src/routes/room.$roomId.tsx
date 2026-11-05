@@ -117,12 +117,17 @@ function RoomPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("rooms")
-        .select("*, host:host_id(id, display_name, avatar_url, username)")
+        .select("*, host:host_id(id, display_name, avatar_url, username, coins)")
         .eq("id", roomId)
         .maybeSingle();
       if (error) throw error;
       return data as unknown as RoomRow & {
-        host: { id: string; display_name: string; avatar_url: string | null } | null;
+        host: {
+          id: string;
+          display_name: string;
+          avatar_url: string | null;
+          coins?: number | null;
+        } | null;
       };
     },
   });
@@ -643,6 +648,32 @@ function RoomPage() {
               <span className="hidden items-center gap-2 rounded-full bg-background/60 px-3 py-1.5 text-xs font-semibold text-muted-foreground sm:inline-flex">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
                 Audio live
+              </span>
+            </div>
+            <div className="mb-6 flex items-center gap-3 rounded-2xl border border-primary/15 bg-background/35 p-3">
+              <SeatFrame charm={room.host?.coins ?? 0} size={58} speaking={false}>
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={room.host?.avatar_url ?? undefined} />
+                  <AvatarFallback aria-label="Room host avatar">
+                    <UserRound className="h-5 w-5 text-muted-foreground" />
+                  </AvatarFallback>
+                </Avatar>
+              </SeatFrame>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="truncate text-sm font-bold">
+                    {room.host?.display_name ?? "Room host"}
+                  </p>
+                  <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold text-gold">
+                    HOST
+                  </span>
+                </div>
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                  {room.topic || "Welcome to the live voice room"}
+                </p>
+              </div>
+              <span className="hidden text-right text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground sm:block">
+                {seats.filter((seat) => seat.user_id).length}/{room.seat_count} seats live
               </span>
             </div>
             <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-4 sm:gap-x-5 sm:gap-y-8 lg:grid-cols-4">
