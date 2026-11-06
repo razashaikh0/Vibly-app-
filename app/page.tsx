@@ -45,9 +45,16 @@ const socialModules = [
   { title: 'Wallet & VIP', detail: 'Coins, gifts, membership', icon: WalletCards, tone: 'from-[#f1edff] to-[#e9e1ff]', accent: 'text-[#805cd8]' },
   { title: 'My family', detail: '2.4k members · level 12', icon: UsersRound, tone: 'from-[#e8faf0] to-[#dff5e8]', accent: 'text-[#3f9e6a]' },
   { title: 'Social inbox', detail: 'DMs, follows & stories', icon: MessageCircle, tone: 'from-[#fff9df] to-[#fff1c7]', accent: 'text-[#b48728]' },
-]
+  ]
 
-function SectionPage({ active, notify }: { active: string; notify: (message: string) => void }) {
+  const rankingModules = [
+    { title: 'Top this week', detail: 'Charm leaders · 12.8k to 9.7k', icon: Trophy, tone: 'from-[#fff2d8] to-[#ffe5bd]', accent: 'text-[#cf8a2e]' },
+    { title: 'Gift sender ranking', detail: 'Top supporters this week', icon: Gift, tone: 'from-[#ffeaf2] to-[#ffdce9]', accent: 'text-[#e05d83]' },
+    { title: 'Family ranking', detail: 'Weekly clan contribution', icon: UsersRound, tone: 'from-[#e7f8ef] to-[#d9f1e4]', accent: 'text-[#3f9e6a]' },
+    { title: 'Couple ranking', detail: 'Intimacy and shared XP', icon: Heart, tone: 'from-[#fff0f0] to-[#ffe1e7]', accent: 'text-[#dc617e]' },
+  ]
+
+  function SectionPage({ active, notify }: { active: string; notify: (message: string) => void }) {
   const titles: Record<string, { eyebrow: string; title: string; description: string }> = {
     Discover: { eyebrow: 'Social feed', title: 'Find your people', description: 'Stories, posts, visitors and conversations from your VibeLy circle.' },
     Games: { eyebrow: 'Mini games', title: 'Pick your next room game', description: 'Only the party games you asked for, ready to launch from a room.' },
@@ -56,7 +63,7 @@ function SectionPage({ active, notify }: { active: string; notify: (message: str
   Profile: { eyebrow: 'My profile', title: 'Your social identity', description: 'Manage your avatar, visitors, badges, gift wall, VIP status and account settings.' },
   }
   const copy = titles[active] ?? titles.Discover
-  const modules = active === 'Games' ? games : active === 'Profile' ? profileModules : socialModules
+  const modules = active === 'Games' ? games : active === 'Profile' ? profileModules : active === 'Rankings' ? rankingModules : socialModules
   const gameShortcuts = [
     { label: 'Rankings', icon: Trophy },
     { label: 'Tasks', icon: Sparkles },
@@ -115,8 +122,7 @@ export default function Page() {
             </div>
 
             <aside className="flex flex-col gap-5"><section className="rounded-[26px] bg-white p-5 shadow-sm shadow-[#eadfe0]"><div className="flex items-center justify-between"><div><p className="text-xs font-black uppercase tracking-widest text-[#ff6b89]">Daily vibes</p><h3 className="mt-1 text-lg font-black">Your social streak</h3></div><div className="rounded-2xl bg-[#fff1d9] p-3 text-xl">🔥</div></div><div className="mt-5 flex justify-between">{['M','T','W','T','F','S','S'].map((day, index) => <div key={`${day}-${index}`} className="flex flex-col items-center gap-2"><span className={`flex size-7 items-center justify-center rounded-full text-[10px] font-black ${index < 4 ? 'bg-[#ff718b] text-white' : 'bg-[#fff3f4] text-[#d8a9b2]'}`}>{index < 4 ? '✓' : day}</span><span className="text-[9px] font-bold text-[#aaa0a9]">{day}</span></div>)}</div><div className="mt-5 flex items-center gap-3 rounded-xl bg-[#fff8ee] p-3"><Sparkles size={18} className="text-[#efa940]"/><p className="text-[11px] font-bold leading-4 text-[#9b7d49]">2 more days to unlock<br/><span className="text-[#d4972f]">a mystery gift box</span></p></div></section>
-              <section className="rounded-[26px] bg-white p-5 shadow-sm shadow-[#eadfe0]"><div className="flex items-center justify-between"><h3 className="text-lg font-black">Top this week</h3><button onClick={() => setActive('Rankings')} className="text-[#ff6588]"><ChevronRight size={18}/></button></div><div className="mt-4 flex flex-col gap-4">{avatars.slice(1,4).map((avatar, i) => <div className="flex items-center gap-3" key={avatar}><span className="w-4 text-center text-xs font-black text-[#b3aab5]">{i + 1}</span><img src={avatar} alt="Top creator" className="size-9 rounded-full object-cover ring-2 ring-white"/><div className="min-w-0 flex-1"><p className="truncate text-xs font-extrabold">{['Maya Kapoor','Zoya Khan','Rohan Verma'][i]}</p><p className="text-[10px] text-[#aaa0a9]">{['12.8k','10.4k','9.7k'][i]} charm</p></div><span className="text-sm">{['👑','✨','💎'][i]}</span></div>)}</div></section>
-              <section className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-[#ffecf1] to-[#f0eaff] p-5"><div className="relative z-10"><div className="flex items-center gap-2 text-[#e85f82]"><Heart size={17} fill="currentColor"/><span className="text-xs font-black uppercase tracking-widest">Couple corner</span></div><h3 className="mt-3 text-xl font-black">Your story is<br/>waiting to begin</h3><p className="mt-2 text-xs leading-5 text-[#988c9b]">Meet someone over a game you both love.</p><button onClick={() => setActive('Couples')} className="mt-4 rounded-xl bg-[#f36387] px-4 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-200">Discover your match</button></div><div className="absolute -bottom-5 -right-2 text-7xl">💞</div></section></aside>
+</aside>
           </div>
           {active !== 'Home' && <SectionPage active={active} notify={notify} />}
         </section>
