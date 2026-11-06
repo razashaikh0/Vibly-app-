@@ -9,6 +9,7 @@ import {
   Crown,
   Flag,
   Gift,
+  Heart,
   LayoutGrid,
   Loader2,
   Lock,
@@ -700,13 +701,33 @@ function RoomPage() {
                 {seats.filter((seat) => seat.user_id).length}/{room.seat_count} seats live
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-4 sm:gap-x-5 sm:gap-y-8 lg:grid-cols-4">
+            <div className="voice-circle-stage">
+              <div className="voice-heart-core">
+                <Heart className="h-7 w-7 fill-primary text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-[0.16em] text-primary">
+                  Intimacy
+                </span>
+                <strong className="text-xl font-black">Lv. 08</strong>
+                <span className="text-[10px] text-muted-foreground">2,480 / 3,000</span>
+                <div className="mt-1 h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+                  <span className="block h-full w-[82%] rounded-full bg-gradient-to-r from-primary to-accent" />
+                </div>
+              </div>
               {seats.map((seat) => {
                 const occupant = seat.profiles;
                 const isSpeaking = seat.user_id ? speaking[seat.user_id] && !seat.is_muted : false;
                 const seatIsHost = seat.user_id === room.host_id;
+                const seatAngle =
+                  (seat.seat_index / Math.max(seats.length, 1)) * Math.PI * 2 - Math.PI / 2;
                 return (
-                  <div key={seat.id} className="flex flex-col items-center gap-2">
+                  <div
+                    key={seat.id}
+                    className="voice-circle-seat"
+                    style={{
+                      left: `${50 + Math.cos(seatAngle) * 39}%`,
+                      top: `${50 + Math.sin(seatAngle) * 39}%`,
+                    }}
+                  >
                     <DropdownMenu>
                       <DropdownMenuTrigger
                         asChild

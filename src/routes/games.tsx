@@ -1,7 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Crown, ClipboardCheck, Users2, DoorOpen } from "lucide-react";
+import {
+  ArrowRight,
+  ClipboardCheck,
+  Crown,
+  Flame,
+  Gift,
+  Radio,
+  Sparkles,
+  Trophy,
+  Users2,
+  Zap,
+} from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
-import { Badge } from "@/components/ui/badge";
+import { GlobalTopBar } from "@/components/GlobalTopBar";
 import spyArt from "@/assets/games/spy.jpg";
 import ludoArt from "@/assets/games/ludo.jpg";
 import drawArt from "@/assets/games/draw.jpg";
@@ -10,19 +21,11 @@ import micArt from "@/assets/games/mic.jpg";
 export const Route = createFileRoute("/games")({
   head: () => ({
     meta: [
-      { title: "Party Games — Play With Your Voice Room" },
+      { title: "WePlay — Games, Rooms & Rewards" },
       {
         name: "description",
-        content:
-          "Play party games with friends in voice rooms: Ludo, Who's the Spy, Guess My Drawing, Mic Grab and UNO.",
+        content: "Play social games, enter voice rooms and collect rewards with friends.",
       },
-      { property: "og:title", content: "Party Games — Play With Your Voice Room" },
-      {
-        property: "og:description",
-        content: "Party games you play together in live voice rooms.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: GamesPage,
@@ -30,123 +33,200 @@ export const Route = createFileRoute("/games")({
 
 type Game = {
   name: string;
+  subtitle: string;
   emoji: string;
-  gradient: string;
   art?: string;
+  tone: string;
+  tag: string;
+  href?: "/play/$slug";
   slug?: string;
-  tag?: string;
-  wide?: boolean;
 };
-
-const GAMES: Game[] = [
-  { name: "Ludo", emoji: "🎲", gradient: "royal-gradient", art: ludoArt, tag: "3D", wide: true },
-  { name: "Who's the Spy", emoji: "🕵️", gradient: "sky-gradient", art: spyArt, tag: "In room" },
-  { name: "Guess My Drawing", emoji: "✏️", gradient: "mint-gradient", art: drawArt },
-  { name: "Mic Grab", emoji: "🎤", gradient: "ember-gradient", art: micArt },
-  { name: "UNO", emoji: "🃏", gradient: "gold-gradient", tag: "New" },
+const FEATURED: Game[] = [
+  {
+    name: "Who's the Spy",
+    subtitle: "Read the room. Find the liar.",
+    emoji: "🕵️",
+    art: spyArt,
+    tone: "from-[#2d69ff] to-[#6f4bff]",
+    tag: "HOT",
+    href: "/play/$slug",
+    slug: "spy",
+  },
+  {
+    name: "Ludo Party",
+    subtitle: "Roll. Race. Rule the room.",
+    emoji: "🎲",
+    art: ludoArt,
+    tone: "from-[#ff8b3d] to-[#ff3f72]",
+    tag: "3D",
+    href: "/play/$slug",
+    slug: "ludo",
+  },
+];
+const QUICK = [
+  { label: "Ranking", icon: Crown, to: "/ranking", tone: "quick-gold" },
+  { label: "Tasks", icon: ClipboardCheck, to: "/tasks", tone: "quick-blue" },
+  { label: "Friends", icon: Users2, to: "/discover", tone: "quick-pink" },
+  { label: "Events", icon: Gift, to: "/discover", tone: "quick-purple" },
+] as const;
+const MORE = [
+  {
+    name: "Guess My Drawing",
+    subtitle: "Draw it. Let them guess.",
+    emoji: "✏️",
+    art: drawArt,
+    tone: "from-[#ffb84d] to-[#ff6688]",
+    tag: "SOCIAL",
+  },
+  {
+    name: "Mic Grab",
+    subtitle: "Own the spotlight.",
+    emoji: "🎤",
+    art: micArt,
+    tone: "from-[#8b5cf6] to-[#d946ef]",
+    tag: "VOICE",
+  },
+  {
+    name: "UNO",
+    subtitle: "One card can change everything.",
+    emoji: "🃏",
+    tone: "from-[#21c4a8] to-[#2173ff]",
+    tag: "NEW",
+  },
+  {
+    name: "Word Battle",
+    subtitle: "Fast minds win more.",
+    emoji: "✦",
+    tone: "from-[#ffcb52] to-[#ff6b38]",
+    tag: "TRENDING",
+  },
 ];
 
-function CardBody({ game }: { game: Game }) {
-  return (
+function GameCard({ game, featured = false }: { game: Game; featured?: boolean }) {
+  const body = (
     <>
+      <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
       {game.art ? (
         <img
           src={game.art}
           alt=""
-          loading="lazy"
-          width={992}
-          height={672}
-          className="absolute inset-0 h-full w-full object-cover opacity-90"
+          className="absolute inset-0 h-full w-full object-cover mix-blend-screen opacity-90"
         />
-      ) : null}
-      <span className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/20 to-transparent" />
-      {game.tag ? (
-        <span className="absolute left-2 top-2 rounded-full bg-background/85 px-2 py-0.5 text-[10px] font-semibold text-foreground">
-          {game.tag}
-        </span>
-      ) : null}
-      <span
-        className={`absolute bottom-2 left-3 max-w-[70%] text-base font-extrabold leading-tight drop-shadow ${
-          game.art ? "text-foreground" : "text-primary-foreground"
-        }`}
-      >
-        {game.name}
-      </span>
-      {game.art ? null : (
-        <span className="absolute -bottom-2 right-2 text-5xl drop-shadow-lg">{game.emoji}</span>
+      ) : (
+        <span className="absolute right-4 top-5 text-6xl drop-shadow-2xl">{game.emoji}</span>
       )}
+      <span className="absolute left-3 top-3 rounded-full bg-black/35 px-2 py-1 text-[9px] font-black tracking-widest text-white backdrop-blur">
+        {game.tag}
+      </span>
+      <span className="absolute bottom-3 left-4 right-3">
+        <b className={`${featured ? "text-xl" : "text-sm"} block font-black text-white`}>
+          {game.name}
+        </b>
+        <small className="mt-0.5 block text-[11px] text-white/75">{game.subtitle}</small>
+      </span>
+      <span className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/20 text-white backdrop-blur">
+        <ArrowRight className="h-4 w-4" />
+      </span>
     </>
   );
-}
-
-function GameCard({ game }: { game: Game }) {
-  const className = `relative block overflow-hidden rounded-2xl ${game.gradient} p-4 text-left shadow-[var(--shadow-card)] ring-1 ring-primary-foreground/20 transition-transform active:scale-[0.98] ${
-    game.wide ? "col-span-2 h-28" : "h-24"
-  }`;
-
-  if (game.slug) {
-    return (
-      <Link to="/play/$slug" params={{ slug: game.slug }} className={className}>
-        <CardBody game={game} />
-      </Link>
-    );
-  }
-  return (
-    <button type="button" className={className}>
-      <CardBody game={game} />
+  const className = `relative block overflow-hidden rounded-[1.4rem] bg-gradient-to-br ${game.tone} shadow-[0_18px_45px_-18px_rgba(31,41,120,.75)] ring-1 ring-white/15 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_-18px_rgba(31,41,120,.9)] active:scale-[.98] ${featured ? "h-48" : "h-36"}`;
+  return game.href ? (
+    <Link to={game.href} params={{ slug: game.slug ?? "" }} className={className}>
+      {body}
+    </Link>
+  ) : (
+    <button type="button" className={`w-full text-left ${className}`}>
+      {body}
     </button>
   );
 }
 
-
-
 function GamesPage() {
   return (
-    <div className="min-h-screen pb-[calc(var(--nav-height)+env(safe-area-inset-bottom)+1.5rem)]">
-      <div className="mx-auto max-w-lg px-4 pt-4">
-        <div className="flex items-center gap-2 overflow-hidden rounded-2xl ember-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground">
-          🧧 Lucky red packet dropping now!
-          <span className="ml-auto rounded-full bg-background/90 px-3 py-0.5 text-xs text-foreground">
-            Enter
+    <div className="weplay-page min-h-screen pb-[calc(var(--nav-height)+2rem)]">
+      <GlobalTopBar />
+      <main className="mx-auto max-w-2xl px-4 pb-8 pt-4 sm:px-6">
+        <section className="weplay-welcome">
+          <div>
+            <p className="text-eyebrow text-primary">THE SOCIAL PLAYGROUND</p>
+            <h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">
+              What are we playing?
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Jump into a room, bring your friends and make some noise.
+            </p>
+          </div>
+          <div className="weplay-level">
+            <Zap className="h-4 w-4 text-gold" />
+            <b>Lv. 12</b>
+            <small>40/60 XP</small>
+          </div>
+        </section>
+        <section className="event-banner mt-5">
+          <span className="event-banner-icon">
+            <Flame className="h-5 w-5" />
           </span>
-        </div>
-
-        <div className="mt-5 grid grid-cols-3 gap-2 text-center text-xs font-medium">
-          <Link to="/ranking" className="flex flex-col items-center gap-1.5">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl gold-gradient text-2xl shadow">
-              <Crown className="h-6 w-6 text-primary-foreground" />
+          <div>
+            <b className="block text-sm">Lucky Red Packet Rush</b>
+            <span className="text-[11px] text-muted-foreground">
+              10K gold is dropping in a live room now
             </span>
-            Ranking
+          </div>
+          <Link
+            to="/"
+            className="ml-auto rounded-full bg-foreground px-3 py-1.5 text-[11px] font-bold text-background"
+          >
+            Enter
           </Link>
-          <Link to="/tasks" className="flex flex-col items-center gap-1.5">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl sky-gradient shadow">
-              <ClipboardCheck className="h-6 w-6 text-primary-foreground" />
-            </span>
-            Tasks
-          </Link>
-          <Link to="/discover" className="flex flex-col items-center gap-1.5">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl mint-gradient shadow">
-              <Users2 className="h-6 w-6 text-primary-foreground" />
-            </span>
-            Friends
-          </Link>
-        </div>
-
-        <div className="mt-6 flex items-center justify-between">
-          <h1 className="text-2xl font-black tracking-tight">Games</h1>
-          <Link to="/">
-            <Badge variant="secondary" className="gap-1 rounded-full px-3 py-1">
-              <DoorOpen className="h-3.5 w-3.5" /> Game Room
-            </Badge>
-          </Link>
-        </div>
-
-        <div className="mt-3 grid grid-cols-2 gap-2.5">
-          {GAMES.map((game) => (
-            <GameCard key={game.name} game={game} />
+        </section>
+        <section className="mt-6 grid grid-cols-4 gap-2">
+          {QUICK.map((item) => (
+            <Link key={item.label} to={item.to} className="quick-action">
+              <span className={`quick-icon ${item.tone}`}>
+                <item.icon className="h-5 w-5" />
+              </span>
+              <span>{item.label}</span>
+            </Link>
           ))}
-        </div>
-      </div>
+        </section>
+        <section className="mt-8">
+          <div className="mb-3 flex items-end justify-between">
+            <div>
+              <p className="text-eyebrow text-primary">FEATURED NOW</p>
+              <h2 className="mt-1 text-xl font-black">Play with the crowd</h2>
+            </div>
+            <Link to="/discover" className="text-xs font-bold text-primary">
+              See all
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {FEATURED.map((game) => (
+              <GameCard key={game.name} game={game} featured />
+            ))}
+          </div>
+        </section>
+        <section className="mt-8">
+          <div className="mb-3 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-gold" />
+            <h2 className="text-xl font-black">More to explore</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {MORE.map((game) => (
+              <GameCard key={game.name} game={game} />
+            ))}
+          </div>
+        </section>
+        <Link to="/" className="room-entry-card mt-6">
+          <span className="room-entry-orb">
+            <Radio className="h-6 w-6" />
+          </span>
+          <span className="flex-1">
+            <b className="block text-sm">Voice Room</b>
+            <small className="text-xs text-muted-foreground">Talk, gift and take the mic</small>
+          </span>
+          <ArrowRight className="h-5 w-5 text-primary" />
+        </Link>
+      </main>
       <BottomNav />
     </div>
   );
