@@ -17,12 +17,14 @@ import {
   ShieldCheck,
   Loader2,
   Coins,
+  UserRound,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { initials } from "@/lib/rooms";
-import { BottomNav } from "@/components/BottomNav";
+import { PageShell } from "@/components/AppShell";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/me")({
   head: () => ({
@@ -85,7 +87,7 @@ function MePage() {
   ];
 
   return (
-    <div className="min-h-screen pb-[calc(var(--nav-height)+env(safe-area-inset-bottom)+1.5rem)]">
+    <PageShell className="pb-8">
       <div className="bg-gradient-to-b from-primary/15 to-transparent px-4 pb-6 pt-6">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           <Avatar className="h-20 w-20 rounded-2xl">
@@ -98,7 +100,15 @@ function MePage() {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-lg font-bold">{profile?.display_name ?? "Guest"}</p>
+            <div className="flex items-center gap-2">
+              <p className="truncate text-lg font-bold">{profile?.display_name ?? "Guest"}</p>
+              <Badge variant="secondary" className="shrink-0 rounded-full text-[10px]">
+                VIP 0
+              </Badge>
+            </div>
+            <p className="truncate text-xs text-muted-foreground">
+              @{profile?.username ?? "new-player"}
+            </p>
             <p className="text-xs text-muted-foreground">
               🪙 {profile?.coins?.toLocaleString() ?? 0} coins
             </p>
@@ -113,6 +123,27 @@ function MePage() {
               <ChevronRight className="h-5 w-5 text-muted-foreground" />
             </Link>
           ) : null}
+        </div>
+
+        <div className="mx-auto mt-4 grid max-w-lg grid-cols-3 gap-2">
+          <div className="rounded-2xl border border-border/60 bg-card/50 px-3 py-2">
+            <p className="text-[10px] text-muted-foreground">Level</p>
+            <p className="mt-0.5 text-sm font-black">{level}</p>
+          </div>
+          <div className="rounded-2xl border border-border/60 bg-card/50 px-3 py-2">
+            <p className="text-[10px] text-muted-foreground">Coins</p>
+            <p className="mt-0.5 text-sm font-black">{(profile?.coins ?? 0).toLocaleString()}</p>
+          </div>
+          <div className="rounded-2xl border border-border/60 bg-card/50 px-3 py-2">
+            <p className="text-[10px] text-muted-foreground">Profile</p>
+            <Link
+              to="/profile/$userId"
+              params={{ userId: user?.id ?? "" }}
+              className="mt-0.5 flex items-center gap-1 text-sm font-black text-primary"
+            >
+              View <UserRound className="h-3 w-3" />
+            </Link>
+          </div>
         </div>
 
         <div className="mx-auto mt-6 grid max-w-lg grid-cols-4 gap-2 text-center text-xs font-medium">
@@ -140,8 +171,6 @@ function MePage() {
           </li>
         ))}
       </ul>
-
-      <BottomNav />
-    </div>
+    </PageShell>
   );
 }

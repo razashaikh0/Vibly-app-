@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SeatFrame, CharmBadge } from "@/components/SeatFrame";
 import { charmProgress, frameTier, nextFrameTier, togetherLabel, daysSince } from "@/lib/levels";
+import { PageShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/profile/$userId")({
   head: () => ({
@@ -235,7 +236,7 @@ function ProfilePage() {
   const bioValue = bioDraft ?? p.bio ?? "";
 
   return (
-    <div className="min-h-screen pb-[calc(var(--nav-height)+env(safe-area-inset-bottom)+1.5rem)]">
+    <PageShell className="pb-8">
       <header className="glass sticky top-0 z-20 flex items-center gap-3 px-4 py-3">
         <Button size="icon" variant="ghost" asChild aria-label="Back">
           <Link to="/">
@@ -424,6 +425,6 @@ function ProfilePage() {
           </section>
         ) : null}
       </main>
-    </div>
+    </PageShell>
   );
 }
