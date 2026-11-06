@@ -47,12 +47,19 @@ function SectionPage({ active, notify }: { active: string; notify: (message: str
   }
   const copy = titles[active] ?? titles.Discover
   const modules = active === 'Games' ? games : socialModules
+  const gameShortcuts = [
+    { label: 'Rankings', icon: Trophy },
+    { label: 'Tasks', icon: Sparkles },
+    { label: 'Friends', icon: Users },
+  ]
   return <section className="mt-7 rounded-[28px] bg-white p-5 shadow-sm shadow-[#eadfe0] sm:p-7">
-    <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff6b89]">{copy.eyebrow}</p>
-    <h2 className="mt-2 text-2xl font-black">{copy.title}</h2>
+    {active === 'Games' && <div className="mb-6 grid grid-cols-3 gap-3">
+      {gameShortcuts.map(({ label, icon: Icon }) => <button key={label} onClick={() => notify(`Opening ${label}`)} className="flex flex-col items-center gap-2 rounded-2xl bg-[#fffaf8] px-3 py-3 text-[10px] font-extrabold text-[#786c7c] transition hover:-translate-y-0.5 hover:bg-[#fff0f3]"><span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff6b89] to-[#8e63e8] text-white shadow-md shadow-pink-100"><Icon size={21}/></span>{label}</button>)}
+    </div>}
+    <div className="flex items-end justify-between gap-3"><div><p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff6b89]">{copy.eyebrow}</p><h2 className="mt-2 text-2xl font-black">{copy.title}</h2></div>{active === 'Games' && <button onClick={() => notify('Opening game room')} className="text-xs font-black text-[#75697a]">Game Room <ChevronRight className="inline" size={14}/></button>}</div>
     <p className="mt-2 max-w-xl text-sm leading-6 text-[#958997]">{copy.description}</p>
-    <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {modules.map((module: any) => { const Icon = module.icon; return <button key={module.title ?? module.name} onClick={() => notify(`Opening ${module.title ?? module.name}`)} className={`group min-h-[140px] rounded-3xl bg-gradient-to-br ${module.tone ?? module.color} p-5 text-left transition hover:-translate-y-1 hover:shadow-lg`}><Icon className={module.accent ?? module.text} size={26}/><p className={`mt-8 text-base font-black ${module.accent ?? module.text}`}>{module.title ?? module.name}</p><p className="mt-1 text-xs font-semibold text-[#948899]">{module.detail ?? module.label}</p></button> })}
+    <div className={`mt-6 grid gap-3 sm:gap-4 ${active === 'Games' ? 'grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
+      {modules.map((module: any, index: number) => { const Icon = module.icon; return <button key={module.title ?? module.name} onClick={() => notify(`Opening ${module.title ?? module.name}`)} className={`group min-h-[126px] rounded-3xl bg-gradient-to-br ${module.tone ?? module.color} p-4 text-left transition hover:-translate-y-1 hover:shadow-lg ${active === 'Games' && index < 2 ? 'col-span-2 min-h-[74px] sm:min-h-[92px]' : ''}`}><Icon className={module.accent ?? module.text} size={active === 'Games' && index < 2 ? 25 : 26}/><p className={`mt-5 text-base font-black ${module.accent ?? module.text}`}>{module.title ?? module.name}</p><p className="mt-1 text-xs font-semibold text-[#948899]">{module.detail ?? module.label}</p></button> })}
     </div>
     <div className="mt-6 grid gap-4 md:grid-cols-3">
       {(active === 'Couples' ? ['Ring shop · Silver, Gold, Diamond & custom rings', 'Proposal inbox · Accept or decline with a cinematic reveal', 'Wedding profile · Date, badge, couple ring and anniversary'] : active === 'Discover' ? ['24-hour stories & moments', 'Followers, visitor list & direct messages', 'Posts, comments, hashtags & gift tipping'] : active === 'Rankings' ? ['Charm & VIP level progress', 'Gift sender and receiver rankings', 'Family, room and couple seasons'] : ['Voice room game launcher', 'Room tournament entry', 'Daily missions and reward chest']).map(item => <div key={item} className="rounded-2xl border border-[#f4e8e8] bg-[#fffaf8] p-4 text-xs font-bold text-[#6f6272]"><span className="mr-2 text-[#ff6b89]">•</span>{item}</div>)}
