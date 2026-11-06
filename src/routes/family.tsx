@@ -13,7 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/family")({
   head: () => ({
@@ -48,10 +54,15 @@ type FamilyRow = {
   member_limit: number;
   region: string | null;
   leader_id: string;
-  family_members: { user_id: string; role: string; points: number; profiles?: { display_name: string; avatar_url: string | null; coins: number } | null }[];
+  family_members: {
+    user_id: string;
+    role: string;
+    points: number;
+    profiles?: { display_name: string; avatar_url: string | null; coins: number } | null;
+  }[];
 };
 
-const CHARM_TO_CREATE = 4000;
+const FAMILY_CREATE_COST = 25000;
 
 function FamilyPage() {
   const { user, profile } = useAuth();
@@ -63,14 +74,16 @@ function FamilyPage() {
   const [badge, setBadge] = useState("");
   const [intro, setIntro] = useState("");
 
-  const charm = profile?.coins ?? 0;
+  const coins = profile?.coins ?? 0;
 
   const { data: families = [], isLoading } = useQuery({
     queryKey: ["families"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("families")
-        .select("*, family_members(user_id, role, points, profiles:user_id(display_name, avatar_url, coins))")
+        .select(
+          "*, family_members(user_id, role, points, profiles:user_id(display_name, avatar_url, coins))",
+        )
         .order("activeness", { ascending: false })
         .limit(100);
       if (error) throw error;
@@ -84,8 +97,8 @@ function FamilyPage() {
 
   const createFamily = async () => {
     if (!user) return;
-    if (charm < CHARM_TO_CREATE) {
-      toast.error(`You need ${CHARM_TO_CREATE.toLocaleString()} charm to create a family.`);
+    if (coins < FAMILY_CREATE_COST) {
+      toast.error(`You need ${FAMILY_CREATE_COST.toLocaleString()} coins to create a family.`);
       return;
     }
     if (name.trim().length < 3) {
@@ -93,24 +106,17 @@ function FamilyPage() {
       return;
     }
     setBusy(true);
-    const { data, error } = await supabase
-      .from("families")
-      .insert({ name: name.trim(), badge: badge.trim() || null, intro: intro.trim() || null, leader_id: user.id })
-      .select("id")
-      .single();
+    const { data, error } = await supabase.rpc("create_family", {
+      _name: name.trim(),
+      _badge: badge.trim() || null,
+      _intro: intro.trim() || null,
+    });
     if (error || !data) {
       setBusy(false);
       toast.error(error?.message ?? "Could not create family");
       return;
     }
-    const { error: memberError } = await supabase
-      .from("family_members")
-      .insert({ family_id: data.id, user_id: user.id, role: "leader" });
     setBusy(false);
-    if (memberError) {
-      toast.error(memberError.message);
-      return;
-    }
     setOpen(false);
     setName("");
     setBadge("");
@@ -169,14 +175,19 @@ function FamilyPage() {
               </DialogHeader>
               <div className="space-y-3">
                 <p className="text-xs text-muted-foreground">
-                  You can create a family only when your charm reaches {CHARM_TO_CREATE.toLocaleString()} or above.
-                  Yours: {charm.toLocaleString()}.
+                  Creating a family costs {FAMILY_CREATE_COST.toLocaleString()} coins. Your balance:{" "}
+                  {coins.toLocaleString()} coins.
                 </p>
                 <div className="space-y-1.5">
                   <Label htmlFor="fname" className="text-xs">
                     Family name
                   </Label>
-                  <Input id="fname" value={name} onChange={(e) => setName(e.target.value)} className="h-9 text-sm" />
+                  <Input
+                    id="fname"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="h-9 text-sm"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="fbadge" className="text-xs">
@@ -226,20 +237,29 @@ function FamilyPage() {
       <main className="mx-auto max-w-lg px-4 py-4">
         {myFamily ? (
           <div className="surface-card mb-4 rounded-2xl p-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">My family</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              My family
+            </p>
             <div className="mt-2 flex items-center gap-2.5">
               <Avatar className="h-10 w-10 rounded-xl">
                 <AvatarImage src={myFamily.avatar_url ?? undefined} alt={myFamily.name} />
-                <AvatarFallback className="rounded-xl text-xs">{initials(myFamily.name)}</AvatarFallback>
+                <AvatarFallback className="rounded-xl text-xs">
+                  {initials(myFamily.name)}
+                </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-bold">{myFamily.name}</p>
                 <p className="text-[11px] text-muted-foreground">
-                  Lv.{myFamily.level} · {myFamily.family_members.length}/{myFamily.member_limit} members ·{" "}
-                  {myFamily.activeness.toLocaleString()} activeness
+                  Lv.{myFamily.level} · {myFamily.family_members.length}/{myFamily.member_limit}{" "}
+                  members · {myFamily.activeness.toLocaleString()} activeness
                 </p>
               </div>
-              <Button size="sm" variant="secondary" className="h-8 text-xs" onClick={() => void leave()}>
+              <Button
+                size="sm"
+                variant="secondary"
+                className="h-8 text-xs"
+                onClick={() => void leave()}
+              >
                 Leave
               </Button>
             </div>
@@ -250,7 +270,10 @@ function FamilyPage() {
             </p>
             <ul className="mt-1.5 space-y-1.5">
               {[...myFamily.family_members]
-                .sort((a, b) => b.points - a.points || (b.profiles?.coins ?? 0) - (a.profiles?.coins ?? 0))
+                .sort(
+                  (a, b) =>
+                    b.points - a.points || (b.profiles?.coins ?? 0) - (a.profiles?.coins ?? 0),
+                )
                 .slice(0, 10)
                 .map((m, i) => (
                   <li key={m.user_id} className="flex items-center gap-2">
@@ -292,10 +315,14 @@ function FamilyPage() {
               const mine = f.family_members.some((m) => m.user_id === user?.id);
               return (
                 <li key={f.id} className="surface-card flex items-center gap-2.5 rounded-2xl p-2.5">
-                  <span className="w-5 text-center text-xs font-bold text-muted-foreground">{i + 1}</span>
+                  <span className="w-5 text-center text-xs font-bold text-muted-foreground">
+                    {i + 1}
+                  </span>
                   <Avatar className="h-10 w-10 rounded-xl">
                     <AvatarImage src={f.avatar_url ?? undefined} alt={f.name} />
-                    <AvatarFallback className="rounded-xl text-xs">{initials(f.name)}</AvatarFallback>
+                    <AvatarFallback className="rounded-xl text-xs">
+                      {initials(f.name)}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-1.5 truncate text-sm font-semibold">
