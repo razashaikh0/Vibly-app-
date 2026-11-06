@@ -61,6 +61,16 @@ export const vibelyEvents = pgTable('vibely_events', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
+export const vibelyWalletTransactions = pgTable('vibely_wallet_transactions', {
+  id: text('id').primaryKey(),
+  profileId: text('profile_id').notNull(),
+  currency: text('currency').notNull(),
+  amount: integer('amount').notNull(),
+  kind: text('kind').notNull(),
+  reference: text('reference'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
 export const vibelyNotifications = pgTable('vibely_notifications', {
   id: text('id').primaryKey(),
   profileId: text('profile_id').notNull(),
