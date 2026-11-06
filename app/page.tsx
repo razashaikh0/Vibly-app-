@@ -50,6 +50,12 @@ const socialModules = [
     { title: 'Couple ranking', detail: 'Intimacy and shared XP', icon: Heart, tone: 'from-[#fff0f0] to-[#ffe1e7]', accent: 'text-[#dc617e]' },
   ]
 
+  const taskSets = {
+    Daily: [['Daily Login', 'Log in to Vibely today.', 'Claim'], ['Play Who’s the Spy', 'Complete 1 game of Who’s the Spy.', 'Go'], ['Join Mic Grab', 'Complete 1 round of Mic Grab.', 'Go'], ['Play Uno', 'Play one quick round of Uno.', 'Go'], ['Play Ludo', 'Play a round of Ludo.', 'Go'], ['Establish more good relations', 'Send gifts every day.', 'Go']],
+    Growth: [['Business Life Game Lv7', 'Family members only. Refreshes every Century at 00:00.', 'Go'], ['Love for All Seasons', 'Hold a wedding for the first time.', 'Go'], ['Charming (144207/145000)', 'Reach 145000 Charm.', 'Go'], ['Social Butterfly (454/460)', 'Have 460 mutual friends.', 'Go'], ['In the Money (674300/680000)', 'Purchase a total of 680000 Gold.', 'Go'], ['First Attempt', 'Win in the mini games for the first time.', 'Completed'], ['New Challenger', 'Win in a board game for the first time.', 'Completed']],
+    Family: [['Family Hope', 'Donate to your family fund.', 'Go'], ['Family Activeness', 'Cheer for your family.', 'Go'], ['Family Games', 'Play games with family members.', 'Go'], ['Family Capsule', 'Open a family capsule.', 'Go'], ['Family Treasure Chest', 'Unlock a family treasure chest.', 'Go'], ['Family Store', 'Visit your family store.', 'Go']],
+  }
+
   function SectionPage({ active, notify }: { active: string; notify: (message: string) => void }) {
   const titles: Record<string, { eyebrow: string; title: string; description: string }> = {
     Discover: { eyebrow: 'Social feed', title: 'Find your people', description: 'Stories, posts, visitors and conversations from your VibeLy circle.' },
@@ -61,6 +67,7 @@ const socialModules = [
   const copy = titles[active] ?? titles.Discover
   const [rankingTab, setRankingTab] = useState('Popularity')
   const [rankingPeriod, setRankingPeriod] = useState('Today')
+  const [taskTab, setTaskTab] = useState('Daily')
   const modules = active === 'Games' ? games : active === 'Profile' ? profileModules : active === 'Rankings' ? rankingModules : socialModules
   const gameShortcuts = [
     { label: 'Rankings', icon: Trophy },
@@ -71,11 +78,11 @@ const socialModules = [
   if (active === 'Tasks') return (
     <section className="min-h-[calc(100vh-160px)] overflow-hidden rounded-[32px] bg-gradient-to-b from-emerald-400 via-lime-300 to-white text-slate-700">
       <div className="px-5 pb-8 pt-6">
-        <div className="mb-6 flex items-center justify-center gap-10 text-lg font-semibold"><button className="border-b-4 border-white pb-2 text-white" onClick={() => notify('Daily tasks selected')}>Daily</button><button className="text-white/70" onClick={() => notify('Growth tasks selected')}>Growth</button><button className="text-white/70" onClick={() => notify('Family tasks selected')}>Family</button></div>
+        <div className="mb-6 flex items-center justify-center gap-10 text-lg font-semibold">{['Daily', 'Growth', 'Family'].map((tab) => <button key={tab} className={taskTab === tab ? 'border-b-4 border-white pb-2 text-white' : 'text-white/70'} onClick={() => { setTaskTab(tab); notify(`${tab} tasks selected`) }}>{tab}</button>)}</div>
         <div className="flex items-center justify-between text-sm text-white"><span>Today&apos;s Activeness 0</span><span>Refresh at 00:00 (GMT+5.5)</span></div>
         <div className="relative mt-7 flex items-start justify-between px-3"><div className="absolute left-5 right-5 top-5 h-1 rounded-full bg-emerald-600/70" />{[10, 40, 70, 100].map((milestone) => <button key={milestone} className="relative z-10 flex flex-col items-center gap-2" onClick={() => notify(`Milestone ${milestone} opened`)}><span className="grid size-10 place-items-center rounded-xl border-2 border-white/80 bg-white/80 text-xs font-bold shadow-lg">{milestone}</span><span className="text-sm font-medium text-emerald-900">{milestone}</span></button>)}</div>
       </div>
-      <div className="rounded-t-[36px] bg-white px-5 pb-8 pt-5"><div className="flex flex-col gap-1">{[['Daily Login', 'Log in to Vibely today.', 'Claim'], ['Play Who’s the Spy', 'Complete 1 game of Who’s the Spy.', 'Go'], ['Join Mic Grab', 'Complete 1 round of Mic Grab.', 'Go'], ['Play Uno', 'Play one quick round of Uno.', 'Go'], ['Play Ludo', 'Play a round of Ludo.', 'Go'], ['Establish more good relations', 'Send gifts every day.', 'Go']].map(([title, description, action], index) => <div key={title} className="flex items-center justify-between border-b border-slate-200 py-5 last:border-0"><div className="min-w-0 pr-4"><h3 className="text-xl font-medium text-slate-700">{title}</h3><p className="mt-1 text-sm text-slate-400">{description}</p><p className="mt-2 text-xs font-semibold text-slate-500">{index === 0 ? 'Reward · 5 hearts' : 'Reward · 5 coins · 5 EXP'}</p></div><button className={`shrink-0 rounded-full px-7 py-3 text-sm font-semibold text-white shadow-sm ${action === 'Claim' ? 'bg-orange-500' : 'bg-emerald-500'}`} onClick={() => notify(`${title} ${action.toLowerCase()}ed`)}>{action}</button></div>)}</div></div>
+      <div className="rounded-t-[36px] bg-white px-5 pb-8 pt-5"><div className="flex flex-col gap-1">{taskSets[taskTab as keyof typeof taskSets].map(([title, description, action], index) => <div key={title} className="flex items-center justify-between border-b border-slate-200 py-5 last:border-0"><div className="min-w-0 pr-4"><h3 className="text-xl font-medium text-slate-700">{title}</h3><p className="mt-1 text-sm text-slate-400">{description}</p><p className="mt-2 text-xs font-semibold text-slate-500">{index === 0 ? 'Reward · 5 hearts' : 'Reward · 5 coins · 5 EXP'}</p></div><button className={`shrink-0 rounded-full px-7 py-3 text-sm font-semibold text-white shadow-sm ${action === 'Claim' ? 'bg-orange-500' : 'bg-emerald-500'}`} onClick={() => notify(`${title} ${action.toLowerCase()}ed`)}>{action}</button></div>)}</div></div>
     </section>
   )
 
