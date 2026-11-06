@@ -4,7 +4,7 @@ import { useState } from 'react'
 import {
   Bell, ChevronRight, Coins, Crown, Dice5, Gamepad2, Gift, Heart, Home, Menu, Mic2,
   MoreHorizontal, Palette, Search, Sparkles, Trophy, Users, Video, WandSparkles, X,
-  WalletCards, Eye, ShoppingBag, UserPlus, ShieldCheck, MessageCircle, UsersRound, Gem, CircleUserRound, Settings2, LogOut,
+  WalletCards, Eye, ShoppingBag, UserPlus, ShieldCheck, MessageCircle, UsersRound, Gem, CircleUserRound, Settings2, LogOut, Mail, Globe2, ArrowRight, LockKeyhole,
 } from 'lucide-react'
 
 const avatars = [
@@ -157,8 +157,13 @@ const socialModules = [
 
 export default function Page() {
   const [active, setActive] = useState('Voice Room')
+  const [showLogin, setShowLogin] = useState(true)
   const [toast, setToast] = useState('')
   const notify = (message: string) => { setToast(message); setTimeout(() => setToast(''), 2200) }
+
+  if (showLogin) return (
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fffaf8] px-5 py-8 text-[#2f2540]"><div className="absolute -left-24 -top-28 size-72 rounded-full bg-[#ffd8e4] blur-3xl"/><div className="absolute -bottom-24 -right-24 size-80 rounded-full bg-[#dce4ff] blur-3xl"/><div className="relative w-full max-w-md"><button onClick={() => notify('Help center opened')} className="absolute right-0 top-0 text-sm font-bold text-[#796e81]">Help</button><div className="mx-auto pt-12 text-center"><div className="mx-auto flex size-24 items-center justify-center rounded-[30px] bg-gradient-to-br from-[#ff6689] via-[#9c5cff] to-[#4a8dff] text-4xl font-black text-white shadow-xl shadow-[#d7c6ff]">V</div><p className="mt-5 text-4xl font-black tracking-[-0.06em] text-[#30213e]">Vibely</p><p className="mt-2 text-base font-medium text-[#918596]">Party games, voice rooms & real friends</p></div><div className="mt-14 rounded-[30px] border border-white/80 bg-white/80 p-5 shadow-xl shadow-[#eadfe8]/70 backdrop-blur"><button onClick={() => setShowLogin(false)} className="flex w-full items-center justify-center gap-3 rounded-2xl border border-[#e9e4e8] bg-white px-4 py-4 text-sm font-black text-[#30213e] transition hover:-translate-y-0.5 hover:shadow-md"><Globe2 className="text-[#4285f4]" size={21}/>Continue with Google</button><div className="my-5 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#b3aab5]"><span className="h-px flex-1 bg-[#eee8ee]"/>or continue with email<span className="h-px flex-1 bg-[#eee8ee]"/></div><form onSubmit={(event) => { event.preventDefault(); setShowLogin(false) }} className="space-y-3"><label htmlFor="vibely-email" className="sr-only">Email address</label><div className="flex items-center gap-3 rounded-2xl border border-[#ece6ec] bg-[#fffafc] px-4 py-3.5"><Mail className="text-[#a895ad]" size={19}/><input id="vibely-email" type="email" placeholder="Email address" autoComplete="email" required className="min-w-0 flex-1 bg-transparent text-sm font-semibold outline-none placeholder:text-[#b8afb9]"/></div><button type="submit" className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#ff6689] to-[#8659e8] px-4 py-4 text-sm font-black text-white shadow-lg shadow-[#e5c8e6]">Continue with email<ArrowRight size={17}/></button></form><p className="mt-4 flex items-center justify-center gap-1 text-center text-[11px] font-medium text-[#aaa0aa]"><LockKeyhole size={13}/> Secure sign-in · no social accounts required</p></div><p className="mt-5 text-center text-[11px] font-medium leading-5 text-[#a89eaa]">By continuing, you agree to Vibely&apos;s <button className="font-black text-[#8060c5]">Terms</button> and <button className="font-black text-[#8060c5]">Privacy Policy</button>.</p></div></main>
+  )
 
   return (
     <main className="min-h-screen bg-[#fffaf8] text-[#2f2540]">
