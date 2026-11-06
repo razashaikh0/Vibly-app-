@@ -1,6 +1,6 @@
 import { boolean, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
-export const matchplayProfiles = pgTable('matchplay_profiles', {
+export const vibelyProfiles = pgTable('vibely_profiles', {
   id: text('id').primaryKey(),
   displayName: text('display_name').notNull(),
   handle: text('handle').notNull().unique(),
@@ -15,7 +15,7 @@ export const matchplayProfiles = pgTable('matchplay_profiles', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-export const matchplayGames = pgTable('matchplay_games', {
+export const vibelyGames = pgTable('vibely_games', {
   id: text('id').primaryKey(),
   slug: text('slug').notNull().unique(),
   name: text('name').notNull(),
@@ -28,7 +28,7 @@ export const matchplayGames = pgTable('matchplay_games', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-export const matchplayRooms = pgTable('matchplay_rooms', {
+export const vibelyRooms = pgTable('vibely_rooms', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   category: text('category').notNull(),
@@ -41,7 +41,7 @@ export const matchplayRooms = pgTable('matchplay_rooms', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-export const matchplayWallets = pgTable('matchplay_wallets', {
+export const vibelyWallets = pgTable('vibely_wallets', {
   profileId: text('profile_id').primaryKey(),
   goldBalance: integer('gold_balance').notNull().default(0),
   diamondBalance: integer('diamond_balance').notNull().default(0),
@@ -49,7 +49,7 @@ export const matchplayWallets = pgTable('matchplay_wallets', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-export const matchplayEvents = pgTable('matchplay_events', {
+export const vibelyEvents = pgTable('vibely_events', {
   id: text('id').primaryKey(),
   title: text('title').notNull(),
   subtitle: text('subtitle'),
@@ -61,7 +61,7 @@ export const matchplayEvents = pgTable('matchplay_events', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-export const matchplayNotifications = pgTable('matchplay_notifications', {
+export const vibelyNotifications = pgTable('vibely_notifications', {
   id: text('id').primaryKey(),
   profileId: text('profile_id').notNull(),
   kind: text('kind').notNull(),

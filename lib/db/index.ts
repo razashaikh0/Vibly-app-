@@ -2,10 +2,10 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import * as schema from './schema'
 
-const globalForDb = globalThis as unknown as { matchplayPool?: Pool }
+const globalForDb = globalThis as unknown as { vibelyPool?: Pool }
 
-export const pool = globalForDb.matchplayPool ?? new Pool({ connectionString: process.env.DATABASE_URL })
+export const pool = globalForDb.vibelyPool ?? new Pool({ connectionString: process.env.DATABASE_URL })
 
-if (process.env.NODE_ENV !== 'production') globalForDb.matchplayPool = pool
+if (process.env.NODE_ENV !== 'production') globalForDb.vibelyPool = pool
 
 export const db = drizzle(pool, { schema })

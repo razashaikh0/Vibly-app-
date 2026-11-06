@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { asc, desc, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { matchplayEvents, matchplayGames, matchplayRooms } from '@/lib/db/schema'
+import { vibelyEvents, vibelyGames, vibelyRooms } from '@/lib/db/schema'
 
 export async function GET() {
   const [games, rooms, events] = await Promise.all([
-    db.select().from(matchplayGames).orderBy(desc(matchplayGames.isFeatured), desc(matchplayGames.activePlayers), asc(matchplayGames.name)),
-    db.select().from(matchplayRooms).where(eq(matchplayRooms.isLive, true)).orderBy(desc(matchplayRooms.memberCount)),
-    db.select().from(matchplayEvents).orderBy(desc(matchplayEvents.startsAt)),
+    db.select().from(vibelyGames).orderBy(desc(vibelyGames.isFeatured), desc(vibelyGames.activePlayers), asc(vibelyGames.name)),
+    db.select().from(vibelyRooms).where(eq(vibelyRooms.isLive, true)).orderBy(desc(vibelyRooms.memberCount)),
+    db.select().from(vibelyEvents).orderBy(desc(vibelyEvents.startsAt)),
   ])
 
   return NextResponse.json({ games, rooms, events })
