@@ -60,6 +60,7 @@ const socialModules = [
 
   const mainTabs = [
   { key: 'Home', label: 'WePlay', icon: Home },
+  { key: 'Voice Room', label: 'Voice Room', icon: Mic2 },
   { key: 'Chats', label: 'Chats', icon: MessageCircle },
   { key: 'Discover', label: 'Discover', icon: Users },
   { key: 'Profile', label: 'Me', icon: CircleUserRound },
