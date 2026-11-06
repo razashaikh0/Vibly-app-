@@ -4,6 +4,7 @@ import { useState } from 'react'
 import {
   Bell, ChevronRight, Coins, Crown, Dice5, Gamepad2, Gift, Heart, Home, Menu, Mic2,
   MoreHorizontal, Palette, Search, Sparkles, Trophy, Users, Video, WandSparkles, X,
+  WalletCards, Eye, ShoppingBag, UserPlus, ShieldCheck, MessageCircle, UsersRound, Gem,
 } from 'lucide-react'
 
 const avatars = [
@@ -26,6 +27,15 @@ const games = [
   { name: 'Oh My Card', label: 'Card battle', icon: Gift, color: 'bg-[#fff8de]', text: 'text-[#b48a20]' },
   { name: 'Ludo', label: 'Play with friends', icon: Dice5, color: 'bg-[#f0eaff]', text: 'text-[#7654d9]' },
   { name: 'Draw & Guess', label: 'Show your talent', icon: Palette, color: 'bg-[#e9f8ef]', text: 'text-[#3a9d68]' },
+]
+
+const socialModules = [
+  { title: 'Ring shop', detail: '4 ring tiers · proposals', icon: ShoppingBag, tone: 'from-[#fff0f4] to-[#ffe2ed]', accent: 'text-[#e45a83]' },
+  { title: 'Couple space', detail: 'Your CP journey & date', icon: Heart, tone: 'from-[#fff3e7] to-[#ffe8d1]', accent: 'text-[#e68543]' },
+  { title: 'Profile visitors', detail: '12 new visitors today', icon: Eye, tone: 'from-[#eaf3ff] to-[#e5eaff]', accent: 'text-[#5578cf]' },
+  { title: 'Wallet & VIP', detail: 'Coins, gifts, membership', icon: WalletCards, tone: 'from-[#f1edff] to-[#e9e1ff]', accent: 'text-[#805cd8]' },
+  { title: 'My family', detail: '2.4k members · level 12', icon: UsersRound, tone: 'from-[#e8faf0] to-[#dff5e8]', accent: 'text-[#3f9e6a]' },
+  { title: 'Social inbox', detail: 'DMs, follows & stories', icon: MessageCircle, tone: 'from-[#fff9df] to-[#fff1c7]', accent: 'text-[#b48728]' },
 ]
 
 export default function Page() {
@@ -51,6 +61,8 @@ export default function Page() {
           <div className="mt-7 grid gap-5 xl:grid-cols-[1fr_310px]">
             <div className="min-w-0">
               <section className="relative overflow-hidden rounded-[28px] bg-gradient-to-r from-[#6340c9] via-[#9c4ed2] to-[#f66b89] px-6 py-7 text-white shadow-xl shadow-purple-100 sm:px-9 sm:py-9"><div className="relative z-10 max-w-[380px]"><div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-[10px] font-black tracking-widest"><Crown size={13} fill="currentColor"/> WEEKLY SPOTLIGHT</div><h2 className="text-2xl font-black leading-tight sm:text-3xl">Find your people.<br/>Make a memory.</h2><p className="mt-3 max-w-[300px] text-sm leading-6 text-white/80">Jump into a room, play a game, and let the good vibes find you.</p><button onClick={() => notify('Opening the room explorer')} className="mt-5 rounded-xl bg-white px-5 py-3 text-xs font-black text-[#7943c9] shadow-lg transition hover:scale-105">Explore live rooms <ChevronRight className="inline" size={15}/></button></div><div className="absolute -right-8 -top-12 size-48 rounded-full bg-white/10"/><div className="absolute -bottom-20 right-20 size-56 rounded-full bg-[#ffb05f]/30"/><div className="absolute bottom-3 right-7 hidden text-[100px] drop-shadow-2xl sm:block">🪩</div></section>
+
+              <section className="mt-6 rounded-[26px] bg-white p-4 shadow-sm shadow-[#eadfe0] sm:p-5"><div className="flex items-end justify-between"><div><p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff6b89]">Your social world</p><h2 className="mt-1 text-xl font-black">Everything that keeps you connected</h2></div><button onClick={() => notify('Opening your social dashboard')} className="text-xs font-bold text-[#9b8fa1]">Open hub <ChevronRight className="inline" size={14}/></button></div><div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">{socialModules.map((module) => { const Icon = module.icon; return <button key={module.title} onClick={() => notify(`Opening ${module.title}`)} className={`group flex min-h-[96px] flex-col justify-between rounded-2xl bg-gradient-to-br ${module.tone} p-3.5 text-left transition hover:-translate-y-0.5 hover:shadow-md`}><Icon className={module.accent} size={21}/><div><p className="text-xs font-black text-[#493b53]">{module.title}</p><p className="mt-1 text-[10px] font-semibold text-[#9c8e9d]">{module.detail}</p></div></button>})}</div></section>
 
               <div className="mt-8 flex items-end justify-between"><div><p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff6b89]">Game room</p><h2 className="mt-1 text-xl font-black">Pick a game, start a vibe</h2></div><button onClick={() => notify('Showing all games')} className="text-xs font-bold text-[#9b8fa1]">See all <ChevronRight className="inline" size={14}/></button></div>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">{games.map((game) => { const Icon = game.icon; return <button key={game.name} onClick={() => notify(`Opening ${game.name}`)} className={`group relative min-h-[122px] overflow-hidden rounded-2xl ${game.color} p-4 text-left transition hover:-translate-y-1 hover:shadow-md`}><Icon className={`relative z-10 size-8 transition group-hover:scale-110 ${game.text}`} strokeWidth={1.8}/><div className={`absolute -right-3 -top-5 size-20 rounded-full border-[10px] border-white/30 ${game.text.replace('text-', 'bg-')}`}/><p className={`relative z-10 mt-5 text-sm font-black ${game.text}`}>{game.name}</p><p className="relative z-10 mt-1 text-[10px] font-semibold text-[#928993]">{game.label}</p></button>})}</div>
