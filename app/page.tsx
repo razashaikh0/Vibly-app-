@@ -62,8 +62,7 @@ const socialModules = [
     { key: 'Home', label: 'WePlay', icon: Home },
     { key: 'Voice Room', label: 'Voice Room', icon: Mic2 },
     { key: 'Chats', label: 'Chats', icon: MessageCircle },
-    { key: 'Discover', label: 'Discover', icon: Users },
-    { key: 'Profile', label: 'Me', icon: CircleUserRound },
+      { key: 'Profile', label: 'Me', icon: CircleUserRound },
   ]
 
   function SectionPage({ active, notify, setActive }: { active: string; notify: (message: string) => void; setActive: (page: string) => void }) {
