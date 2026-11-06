@@ -84,6 +84,14 @@ const socialModules = [
     </section>
   )
 
+  if (active === 'Wallet') return (
+    <section className="mt-7 rounded-[30px] bg-white p-5 shadow-sm shadow-[#eadfe0] sm:p-8">
+      <div className="flex items-center justify-between"><div><p className="text-xs font-black uppercase tracking-[0.2em] text-[#c58a35]">Your balance</p><h2 className="mt-1 text-3xl font-black text-[#493b53]">Wallet</h2></div><button onClick={() => notify('Wallet history opened')} className="rounded-full bg-[#fff4db] px-4 py-2 text-xs font-black text-[#b87920]">History</button></div>
+      <div className="mt-6 rounded-[28px] bg-gradient-to-br from-[#fff0c7] via-[#ffe3a4] to-[#f8c86e] p-5 text-[#80551d] shadow-sm"><p className="text-sm font-bold opacity-70">Available coins</p><p className="mt-2 text-4xl font-black">12,840</p><div className="mt-5 flex items-center justify-between text-xs font-bold"><span>Earned this week</span><span>+2,460</span></div></div>
+      <div className="mt-6 grid grid-cols-2 gap-3"><button onClick={() => notify('Send gifts opened')} className="rounded-2xl bg-[#fff5f7] p-4 text-left"><Gift className="text-[#ed6b8d]" size={22}/><p className="mt-3 text-sm font-black">Send gifts</p><p className="mt-1 text-xs text-[#a79ba5]">Support your friends</p></button><button onClick={() => notify('Rewards opened')} className="rounded-2xl bg-[#f3f0ff] p-4 text-left"><Sparkles className="text-[#8b64df]" size={22}/><p className="mt-3 text-sm font-black">Rewards</p><p className="mt-1 text-xs text-[#a79ba5]">Claim your bonuses</p></button></div>
+    </section>
+  )
+
   if (active === 'Chats') return (
     <section className="mt-7 rounded-[30px] bg-white p-4 shadow-sm shadow-[#eadfe0] sm:p-7">
       <div className="flex items-center justify-between"><div><p className="text-xs font-black uppercase tracking-[0.2em] text-[#f06688]">Social inbox</p><h2 className="mt-1 text-2xl font-black">Chats</h2></div><button onClick={() => notify('New message composer opened')} aria-label="New message" className="rounded-2xl bg-[#fff0f3] px-4 py-2 text-sm font-black text-[#e55f82]">+</button></div>
@@ -137,7 +145,7 @@ export default function Page() {
         <aside className="hidden w-[220px] shrink-0 flex-col border-r border-[#f3e9e7] bg-white px-5 py-7 lg:flex">
           <div className="flex items-center gap-2 px-2"><div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff6d8c] to-[#8c4bff] text-xl text-white shadow-lg shadow-pink-200">✦</div><span className="text-xl font-black tracking-tight">Vibe<span className="text-[#ff6588]">ly</span></span></div>
           <nav className="mt-12 flex flex-col gap-2">
-            {[[Home,'Home'],[Users,'Discover'],[MessageCircle,'Chats'],[Heart,'Couples'],[CircleUserRound,'Profile']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${active === label ? 'bg-[#fff0f3] text-[#f35f83]' : 'text-[#8c8297] hover:bg-[#faf6f5]'}`}><Icon size={19} /><span>{label as string}</span>{label === 'Couples' && <span className="ml-auto rounded-full bg-[#ffdfeb] px-1.5 py-0.5 text-[10px] text-[#e65d83]">NEW</span>}</button>)}
+            {[[Home,'Home'],[Users,'Discover'],[MessageCircle,'Chats'],[Coins,'Wallet'],[CircleUserRound,'Profile']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${active === label ? 'bg-[#fff0f3] text-[#f35f83]' : 'text-[#8c8297] hover:bg-[#faf6f5]'}`}><Icon size={19} /><span>{label as string}</span>{label === 'Couples' && <span className="ml-auto rounded-full bg-[#ffdfeb] px-1.5 py-0.5 text-[10px] text-[#e65d83]">NEW</span>}</button>)}
           </nav>
           <div className="mt-auto rounded-3xl bg-gradient-to-br from-[#fff0f3] to-[#f0eaff] p-4"><Sparkles className="mb-3 text-[#a26bfa]" size={20}/><p className="text-sm font-extrabold">Make your entrance unforgettable</p><p className="mt-1 text-xs leading-5 text-[#8d8193]">Unlock a special arrival effect.</p><button onClick={() => notify('VIP shop is opening soon')} className="mt-3 text-xs font-bold text-[#8857db]">Explore VIP <ChevronRight className="inline" size={14}/></button></div>
           <button onClick={() => notify('Profile settings')} className="mt-6 flex items-center gap-3 border-t border-[#f3e9e7] pt-5 text-left"><img src={avatars[0]} alt="Your profile" className="size-9 rounded-full object-cover"/><div><p className="text-xs font-extrabold">Aarav Mehta</p><p className="text-[10px] text-[#a098a4]">Level 18 · Charm 4.2k</p></div><MoreHorizontal className="ml-auto text-[#aaa0ad]" size={17}/></button>
@@ -165,7 +173,7 @@ export default function Page() {
           {active !== 'Home' && <SectionPage active={active} notify={notify} />}
         </section>
       </div>
-      <nav className="sticky bottom-0 z-20 flex items-center justify-around border-t border-[#f3e9e7] bg-white/95 px-4 py-3 backdrop-blur lg:hidden">{[[Home,'Home'],[Users,'Discover'],[MessageCircle,'Chats'],[Heart,'Couples'],[CircleUserRound,'Profile']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex flex-col items-center gap-1 text-[10px] font-bold ${active === label ? 'text-[#f35f83]' : 'text-[#aaa0aa]'}`}><Icon size={19}/>{label as string}</button>)}</nav>
+      <nav className="sticky bottom-0 z-20 flex items-center justify-around border-t border-[#f3e9e7] bg-white/95 px-4 py-3 backdrop-blur lg:hidden">{[[Home,'Home'],[Users,'Discover'],[MessageCircle,'Chats'],[Coins,'Wallet'],[CircleUserRound,'Profile']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex flex-col items-center gap-1 text-[10px] font-bold ${active === label ? 'text-[#f35f83]' : 'text-[#aaa0aa]'}`}><Icon size={19}/>{label as string}</button>)}</nav>
       {toast && <div role="status" className="fixed bottom-20 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#30253f] px-5 py-3 text-xs font-bold text-white shadow-xl lg:bottom-8"><Sparkles size={14} className="text-[#ffb4c5]"/>{toast}<button onClick={() => setToast('')} aria-label="Dismiss"><X size={14}/></button></div>}
     </main>
   )
