@@ -2,12 +2,22 @@ import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { BarChart3, Plus, Radio, Search, Settings, Users, Coins, LogOut, Loader2 } from "lucide-react";
+import {
+  BarChart3,
+  Plus,
+  Radio,
+  Search,
+  Settings,
+  Users,
+  Coins,
+  LogOut,
+  Loader2,
+} from "lucide-react";
 import logo from "@/assets/logo.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { NotificationsBell } from "@/components/NotificationsBell";
-import { BottomNav } from "@/components/BottomNav";
+import { PageShell } from "@/components/AppShell";
 import { SplashScreen } from "@/components/SplashScreen";
 import { EMOJIS, THEMES, themeGradient, initials, type RoomRow, type SeatRow } from "@/lib/rooms";
 import { Button } from "@/components/ui/button";
@@ -94,7 +104,10 @@ function Home() {
 
   const visibleRooms = rooms
     .filter((room) => {
-      if (search && !`${room.name} ${room.topic ?? ""}`.toLowerCase().includes(search.toLowerCase()))
+      if (
+        search &&
+        !`${room.name} ${room.topic ?? ""}`.toLowerCase().includes(search.toLowerCase())
+      )
         return false;
       if (tab === "all" || tab === "popular") return true;
       return (room.category ?? "chats") === tab;
@@ -133,7 +146,7 @@ function Home() {
   if (!user) return <SplashScreen />;
 
   return (
-    <div className="min-h-screen pb-[calc(var(--nav-height)+3.5rem)]">
+    <PageShell className="pb-8">
       <header className="app-header sticky top-0 z-20">
         <div className="mx-auto grid w-full max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
           <div className="flex min-w-0 items-center gap-2">
@@ -158,7 +171,6 @@ function Home() {
               asChild
               aria-label="Analytics"
               className="hidden text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground sm:inline-flex"
-
             >
               <Link to="/analytics">
                 <BarChart3 className="h-4 w-4" />
@@ -188,7 +200,6 @@ function Home() {
               onClick={() => void signOut()}
               aria-label="Sign out"
               className="hidden text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground sm:inline-flex"
-
             >
               <LogOut className="h-4 w-4" />
             </Button>
@@ -213,7 +224,6 @@ function Home() {
         </div>
       </header>
 
-
       <main className="mx-auto w-full max-w-5xl px-page pt-4 sm:pt-5">
         <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
           {CATEGORIES.map((c) => (
@@ -228,7 +238,6 @@ function Home() {
           ))}
         </div>
 
-
         {isLoading ? (
           <div className="mt-10 grid place-items-center">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
@@ -237,7 +246,9 @@ function Home() {
           <div className="glass mt-8 rounded-3xl p-10 text-center">
             <p className="text-4xl">🎙️</p>
             <p className="mt-3 font-semibold">No rooms are live right now</p>
-            <p className="text-sm text-muted-foreground">Create the first room and invite your friends.</p>
+            <p className="text-sm text-muted-foreground">
+              Create the first room and invite your friends.
+            </p>
           </div>
         ) : (
           <div className="mt-5 flex flex-col gap-3">
@@ -265,7 +276,9 @@ function Home() {
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h2 className="truncate font-display text-base font-bold sm:text-lg">{room.name}</h2>
+                    <h2 className="truncate font-display text-base font-bold sm:text-lg">
+                      {room.name}
+                    </h2>
                     <p className="truncate text-sm text-muted-foreground">
                       {room.topic || "Come hang out and chat"}
                     </p>
@@ -282,7 +295,9 @@ function Home() {
                   <div className="hidden shrink-0 flex-col items-end gap-2 sm:flex">
                     <Avatar className="h-10 w-10 border border-border">
                       <AvatarImage src={room.profiles?.avatar_url ?? undefined} />
-                      <AvatarFallback>{initials(room.profiles?.display_name ?? "H")}</AvatarFallback>
+                      <AvatarFallback>
+                        {initials(room.profiles?.display_name ?? "H")}
+                      </AvatarFallback>
                     </Avatar>
                     <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground">
                       {full ? "Listen in" : "Join"}
@@ -294,7 +309,6 @@ function Home() {
           </div>
         )}
       </main>
-
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
@@ -382,8 +396,6 @@ function Home() {
           </div>
         </DialogContent>
       </Dialog>
-      <BottomNav />
-    </div>
-
+    </PageShell>
   );
 }

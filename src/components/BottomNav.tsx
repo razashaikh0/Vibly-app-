@@ -15,10 +15,16 @@ export function BottomNav() {
   const { t } = useLanguage();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
+    <nav
+      aria-label="Primary navigation"
+      className="app-bottom-nav fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl"
+    >
       <ul className="mx-auto flex max-w-xl items-stretch justify-between gap-0.5 px-1 py-1 sm:px-2 sm:py-1.5">
         {TABS.map((tab) => {
-          const active = tab.to === "/" ? pathname === "/" : pathname.startsWith(tab.to);
+          const active =
+            tab.to === "/"
+              ? pathname === "/"
+              : pathname === tab.to || pathname.startsWith(`${tab.to}/`);
           const Icon = tab.icon;
           return (
             <li key={tab.to} className="min-w-0 flex-1">
@@ -38,6 +44,7 @@ export function BottomNav() {
                 </span>
                 <span className="w-full truncate text-center">{t(tab.label)}</span>
                 <span
+                  aria-hidden
                   className={`h-1 w-4 rounded-full ${active ? "bg-primary" : "bg-transparent"}`}
                 />
               </Link>

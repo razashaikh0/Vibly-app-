@@ -11,7 +11,7 @@ import {
   Users2,
   Zap,
 } from "lucide-react";
-import { BottomNav } from "@/components/BottomNav";
+import { PageShell } from "@/components/AppShell";
 import { GlobalTopBar } from "@/components/GlobalTopBar";
 import spyArt from "@/assets/games/spy.jpg";
 import ludoArt from "@/assets/games/ludo.jpg";
@@ -143,7 +143,7 @@ function GameCard({ game, featured = false }: { game: Game; featured?: boolean }
 
 function GamesPage() {
   return (
-    <div className="weplay-page min-h-screen pb-[calc(var(--nav-height)+2rem)]">
+    <PageShell className="weplay-page pb-8">
       <GlobalTopBar />
       <main className="mx-auto max-w-2xl px-4 pb-8 pt-4 sm:px-6">
         <section className="weplay-welcome">
@@ -227,7 +227,6 @@ function GamesPage() {
           <ArrowRight className="h-5 w-5 text-primary" />
         </Link>
       </main>
-      <BottomNav />
-    </div>
+    </PageShell>
   );
 }

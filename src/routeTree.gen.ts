@@ -27,6 +27,9 @@ import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as SecurityRouteImport } from './routes/security'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as VipRouteImport } from './routes/vip'
+import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as WeddingRouteImport } from './routes/wedding'
 import { Route as PlaySlugRouteImport } from './routes/play.$slug'
 import { Route as ProfileUserIdRouteImport } from './routes/profile.$userId'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
@@ -121,6 +124,21 @@ const TasksRoute = TasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VipRoute = VipRouteImport.update({
+  id: '/vip',
+  path: '/vip',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WeddingRoute = WeddingRouteImport.update({
+  id: '/wedding',
+  path: '/wedding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlaySlugRoute = PlaySlugRouteImport.update({
   id: '/play/$slug',
   path: '/play/$slug',
@@ -156,6 +174,9 @@ export interface FileRoutesByFullPath {
   '/security': typeof SecurityRoute
   '/shop': typeof ShopRoute
   '/tasks': typeof TasksRoute
+  '/vip': typeof VipRoute
+  '/wallet': typeof WalletRoute
+  '/wedding': typeof WeddingRoute
   '/play/$slug': typeof PlaySlugRoute
   '/profile/$userId': typeof ProfileUserIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
@@ -179,6 +200,9 @@ export interface FileRoutesByTo {
   '/security': typeof SecurityRoute
   '/shop': typeof ShopRoute
   '/tasks': typeof TasksRoute
+  '/vip': typeof VipRoute
+  '/wallet': typeof WalletRoute
+  '/wedding': typeof WeddingRoute
   '/play/$slug': typeof PlaySlugRoute
   '/profile/$userId': typeof ProfileUserIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
@@ -203,6 +227,9 @@ export interface FileRoutesById {
   '/security': typeof SecurityRoute
   '/shop': typeof ShopRoute
   '/tasks': typeof TasksRoute
+  '/vip': typeof VipRoute
+  '/wallet': typeof WalletRoute
+  '/wedding': typeof WeddingRoute
   '/play/$slug': typeof PlaySlugRoute
   '/profile/$userId': typeof ProfileUserIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
@@ -228,6 +255,9 @@ export interface FileRouteTypes {
     | '/security'
     | '/shop'
     | '/tasks'
+    | '/vip'
+    | '/wallet'
+    | '/wedding'
     | '/play/$slug'
     | '/profile/$userId'
     | '/room/$roomId'
@@ -251,6 +281,9 @@ export interface FileRouteTypes {
     | '/security'
     | '/shop'
     | '/tasks'
+    | '/vip'
+    | '/wallet'
+    | '/wedding'
     | '/play/$slug'
     | '/profile/$userId'
     | '/room/$roomId'
@@ -274,6 +307,9 @@ export interface FileRouteTypes {
     | '/security'
     | '/shop'
     | '/tasks'
+    | '/vip'
+    | '/wallet'
+    | '/wedding'
     | '/play/$slug'
     | '/profile/$userId'
     | '/room/$roomId'
@@ -298,6 +334,9 @@ export interface RootRouteChildren {
   SecurityRoute: typeof SecurityRoute
   ShopRoute: typeof ShopRoute
   TasksRoute: typeof TasksRoute
+  VipRoute: typeof VipRoute
+  WalletRoute: typeof WalletRoute
+  WeddingRoute: typeof WeddingRoute
   PlaySlugRoute: typeof PlaySlugRoute
   ProfileUserIdRoute: typeof ProfileUserIdRoute
   RoomRoomIdRoute: typeof RoomRoomIdRoute
@@ -431,6 +470,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vip': {
+      id: '/vip'
+      path: '/vip'
+      fullPath: '/vip'
+      preLoaderRoute: typeof VipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wedding': {
+      id: '/wedding'
+      path: '/wedding'
+      fullPath: '/wedding'
+      preLoaderRoute: typeof WeddingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/play/$slug': {
       id: '/play/$slug'
       path: '/play/$slug'
@@ -474,6 +534,9 @@ const rootRouteChildren: RootRouteChildren = {
   SecurityRoute: SecurityRoute,
   ShopRoute: ShopRoute,
   TasksRoute: TasksRoute,
+  VipRoute: VipRoute,
+  WalletRoute: WalletRoute,
+  WeddingRoute: WeddingRoute,
   PlaySlugRoute: PlaySlugRoute,
   ProfileUserIdRoute: ProfileUserIdRoute,
   RoomRoomIdRoute: RoomRoomIdRoute,

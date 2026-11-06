@@ -797,3 +797,34 @@
     height: 7rem;
   }
 }
+
+/* Stable shared shell primitives: preserve the existing visual system while
+   giving every route the same safe-area and navigation contract. */
+.app-shell {
+  width: 100%;
+  min-width: 0;
+  isolation: isolate;
+}
+
+.app-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.app-bottom-nav {
+  min-height: var(--nav-height);
+  padding-bottom: max(env(safe-area-inset-bottom), 0.25rem);
+}
+
+.app-bottom-nav a:focus-visible,
+.app-bottom-nav button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-bottom-nav * {
+    transition-duration: 0.01ms !important;
+  }
+}
