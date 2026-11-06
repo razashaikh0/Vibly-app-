@@ -828,3 +828,35 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Voice Room toolbar: dense, touch-friendly controls that stay inside the existing room surface. */
+.room-toolbar .room-tool-button {
+  display: flex;
+  min-width: 0;
+  height: auto;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-radius: 0.9rem;
+  padding: 0.55rem 0.25rem;
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.room-tool-icon {
+  display: grid;
+  height: 1.85rem;
+  width: 1.85rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+}
+
+@media (max-width: 420px) {
+  .room-toolbar .room-tool-button {
+    font-size: 0.58rem;
+  }
+  .room-tool-icon {
+    height: 1.7rem;
+    width: 1.7rem;
+  }
+}

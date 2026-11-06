@@ -8,6 +8,7 @@ import {
   Coins,
   Crown,
   Flag,
+  Gamepad2,
   Gift,
   Heart,
   LayoutGrid,
@@ -18,6 +19,8 @@ import {
   MicOff,
   Radio,
   Send,
+  Settings,
+  Share2,
   Trophy,
   Undo2,
   Unlock,
@@ -25,6 +28,8 @@ import {
   UserPlus,
   UserRound,
   UserMinus,
+  Users,
+  Volume2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -88,6 +93,7 @@ function RoomPage() {
   const queryClient = useQueryClient();
 
   const [micOn, setMicOn] = useState(true);
+  const [speakerOn, setSpeakerOn] = useState(true);
   const [draft, setDraft] = useState("");
   const [giftTarget, setGiftTarget] = useState<{ id: string; name: string } | null>(null);
   const [reportTarget, setReportTarget] = useState<SeatRow | null>(null);
@@ -480,6 +486,23 @@ function RoomPage() {
     void navigate({ to: "/" });
   };
 
+  const shareRoom = async () => {
+    const shareData = {
+      title: room?.name ?? "Live voice room",
+      text: room?.topic ?? "Join my live voice room",
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) await navigator.share(shareData);
+      else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Room link copied");
+      }
+    } catch {
+      // Closing the native share sheet is not an error.
+    }
+  };
+
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     const content = draft.trim();
@@ -635,6 +658,20 @@ function RoomPage() {
         <Badge variant="secondary" className="gap-1 rounded-full text-gold">
           <Coins className="h-3.5 w-3.5" /> {profile?.coins ?? 0}
         </Badge>
+        <span className="hidden items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary sm:inline-flex">
+          <Heart className="h-3 w-3 fill-primary" /> Intimacy 08
+        </span>
+        <span className="hidden items-center gap-1 rounded-full bg-gold/10 px-2.5 py-1 text-[10px] font-bold text-gold md:inline-flex">
+          <Trophy className="h-3 w-3" /> Room #12
+        </span>
+        <Button
+          size="icon"
+          variant="ghost"
+          aria-label="Share room"
+          onClick={() => void shareRoom()}
+        >
+          <Share2 className="h-4 w-4" />
+        </Button>
         <Button
           size="sm"
           variant={following ? "secondary" : "default"}
@@ -863,34 +900,119 @@ function RoomPage() {
             </div>
           </div>
 
-          <div className="room-controls mt-4 flex items-center gap-3 rounded-2xl p-3 sm:p-4">
-            {mySeat ? (
-              <>
+          <div className="room-controls room-toolbar mt-4 rounded-2xl p-3 sm:p-4">
+            <div className="flex items-center justify-between gap-2 border-b border-border/70 pb-3">
+              <div>
+                <p className="text-eyebrow text-primary">ROOM CONTROLS</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {mySeat ? "You are on stage" : "Listener mode — tap an empty seat to speak"}
+                </p>
+              </div>
+              {mySeat ? (
                 <Button
-                  className="flex-1 gap-2 rounded-full"
-                  variant={micOn && !mySeat.is_muted ? "default" : "secondary"}
-                  onClick={() => void toggleMic()}
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1.5 rounded-full text-xs"
+                  onClick={() => void leaveSeat()}
                 >
-                  {micOn && !mySeat.is_muted ? (
+                  <LogOut className="h-3.5 w-3.5" /> Leave
+                </Button>
+              ) : null}
+            </div>
+            <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-7">
+              <Button
+                variant={mySeat && micOn && !mySeat.is_muted ? "default" : "secondary"}
+                className="room-tool-button"
+                onClick={() =>
+                  mySeat ? void toggleMic() : toast.info("Tap an empty seat to join the stage")
+                }
+              >
+                <span className="room-tool-icon">
+                  {mySeat && micOn && !mySeat.is_muted ? (
                     <Mic className="h-4 w-4" />
                   ) : (
                     <MicOff className="h-4 w-4" />
                   )}
-                  {micOn && !mySeat.is_muted ? "Mic on" : "Mic off"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="gap-2 rounded-full"
-                  onClick={() => void leaveSeat()}
-                >
-                  <LogOut className="h-4 w-4" /> Leave seat
-                </Button>
-              </>
-            ) : (
-              <p className="px-2 text-sm text-muted-foreground">
-                Listener mode — tap any empty seat to take the mic.
-              </p>
-            )}
+                </span>
+                <span>Mic</span>
+              </Button>
+              <Button
+                variant={speakerOn ? "secondary" : "ghost"}
+                className="room-tool-button"
+                onClick={() => setSpeakerOn((value) => !value)}
+              >
+                <span className="room-tool-icon">
+                  <Volume2 className="h-4 w-4" />
+                </span>
+                <span>Speaker</span>
+              </Button>
+              <Button
+                variant="secondary"
+                className="room-tool-button"
+                onClick={() => {
+                  setHubTab("members");
+                  setHubOpen(true);
+                }}
+              >
+                <span className="room-tool-icon text-gold">
+                  <Gift className="h-4 w-4" />
+                </span>
+                <span>Gift</span>
+              </Button>
+              <Button
+                variant="secondary"
+                className="room-tool-button"
+                onClick={() =>
+                  document
+                    .querySelector<HTMLInputElement>('input[placeholder="Type a message..."]')
+                    ?.focus()
+                }
+              >
+                <span className="room-tool-icon">
+                  <Send className="h-4 w-4" />
+                </span>
+                <span>Chat</span>
+              </Button>
+              <Button
+                variant="secondary"
+                className="room-tool-button"
+                onClick={() => {
+                  setHubTab("members");
+                  setHubOpen(true);
+                }}
+              >
+                <span className="room-tool-icon">
+                  <Users className="h-4 w-4" />
+                </span>
+                <span>Members</span>
+              </Button>
+              <Button
+                variant="secondary"
+                className="room-tool-button"
+                onClick={() => setGamePanel(true)}
+              >
+                <span className="room-tool-icon">
+                  <Gamepad2 className="h-4 w-4" />
+                </span>
+                <span>Games</span>
+              </Button>
+              <Button
+                variant="secondary"
+                className="room-tool-button"
+                onClick={() =>
+                  toast.info(
+                    isHost
+                      ? "Room settings panel coming next"
+                      : "Only the host can manage room settings",
+                  )
+                }
+              >
+                <span className="room-tool-icon">
+                  <Settings className="h-4 w-4" />
+                </span>
+                <span>Settings</span>
+              </Button>
+            </div>
           </div>
         </section>
 
