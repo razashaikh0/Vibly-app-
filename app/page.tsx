@@ -4,7 +4,7 @@ import { useState } from 'react'
 import {
   Bell, ChevronRight, Coins, Crown, Dice5, Gamepad2, Gift, Heart, Home, Menu, Mic2,
   MoreHorizontal, Palette, Search, Sparkles, Trophy, Users, Video, WandSparkles, X,
-  WalletCards, Eye, ShoppingBag, UserPlus, ShieldCheck, MessageCircle, UsersRound, Gem,
+  WalletCards, Eye, ShoppingBag, UserPlus, ShieldCheck, MessageCircle, UsersRound, Gem, CircleUserRound,
 } from 'lucide-react'
 
 const avatars = [
@@ -29,6 +29,15 @@ const games = [
   { name: 'Draw & Guess', label: 'Show your talent', icon: Palette, color: 'bg-[#e9f8ef]', text: 'text-[#3a9d68]' },
 ]
 
+const profileModules = [
+  { title: 'Edit avatar', detail: 'Outfits, frames and entrance effects', icon: WandSparkles, tone: 'from-[#ffe1e9] to-[#fff0f4]', accent: 'text-[#ef6687]' },
+  { title: 'Profile visitors', detail: 'See who checked your profile', icon: Eye, tone: 'from-[#e4f5ff] to-[#eef8ff]', accent: 'text-[#4fa3d5]' },
+  { title: 'Gift wall', detail: 'Your rare gifts and collections', icon: Gift, tone: 'from-[#fff0c9] to-[#fff8e2]', accent: 'text-[#d79d2d]' },
+  { title: 'VIP center', detail: 'Level, benefits and renewal', icon: Crown, tone: 'from-[#ede5ff] to-[#f8f3ff]', accent: 'text-[#8664d7]' },
+  { title: 'Followers', detail: 'Following, close friends and blocks', icon: UsersRound, tone: 'from-[#e5f8ed] to-[#f2fff6]', accent: 'text-[#4da978]' },
+  { title: 'Account settings', detail: 'Privacy, safety and notifications', icon: ShieldCheck, tone: 'from-[#f1edf0] to-[#fbf9fb]', accent: 'text-[#837783]' },
+]
+
 const socialModules = [
   { title: 'Ring shop', detail: '4 ring tiers · proposals', icon: ShoppingBag, tone: 'from-[#fff0f4] to-[#ffe2ed]', accent: 'text-[#e45a83]' },
   { title: 'Couple space', detail: 'Your CP journey & date', icon: Heart, tone: 'from-[#fff3e7] to-[#ffe8d1]', accent: 'text-[#e68543]' },
@@ -44,9 +53,10 @@ function SectionPage({ active, notify }: { active: string; notify: (message: str
     Games: { eyebrow: 'Mini games', title: 'Pick your next room game', description: 'Only the party games you asked for, ready to launch from a room.' },
     Couples: { eyebrow: 'Wedding & CP', title: 'Build a story together', description: 'Shop rings, send proposals, celebrate anniversaries and manage your couple space.' },
     Rankings: { eyebrow: 'Rankings', title: 'Your social progress', description: 'Track charm, gifts, VIP, family and couple milestones in one place.' },
+  Profile: { eyebrow: 'My profile', title: 'Your social identity', description: 'Manage your avatar, visitors, badges, gift wall, VIP status and account settings.' },
   }
   const copy = titles[active] ?? titles.Discover
-  const modules = active === 'Games' ? games : socialModules
+  const modules = active === 'Games' ? games : active === 'Profile' ? profileModules : socialModules
   const gameShortcuts = [
     { label: 'Rankings', icon: Trophy },
     { label: 'Tasks', icon: Sparkles },
@@ -78,7 +88,7 @@ export default function Page() {
         <aside className="hidden w-[220px] shrink-0 flex-col border-r border-[#f3e9e7] bg-white px-5 py-7 lg:flex">
           <div className="flex items-center gap-2 px-2"><div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff6d8c] to-[#8c4bff] text-xl text-white shadow-lg shadow-pink-200">✦</div><span className="text-xl font-black tracking-tight">Vibe<span className="text-[#ff6588]">ly</span></span></div>
           <nav className="mt-12 flex flex-col gap-2">
-            {[[Home,'Home'],[Users,'Discover'],[Gamepad2,'Games'],[Heart,'Couples'],[Trophy,'Rankings']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${active === label ? 'bg-[#fff0f3] text-[#f35f83]' : 'text-[#8c8297] hover:bg-[#faf6f5]'}`}><Icon size={19} /><span>{label as string}</span>{label === 'Couples' && <span className="ml-auto rounded-full bg-[#ffdfeb] px-1.5 py-0.5 text-[10px] text-[#e65d83]">NEW</span>}</button>)}
+            {[[Home,'Home'],[Users,'Discover'],[Gamepad2,'Games'],[Heart,'Couples'],[Trophy,'Rankings'],[CircleUserRound,'Profile']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${active === label ? 'bg-[#fff0f3] text-[#f35f83]' : 'text-[#8c8297] hover:bg-[#faf6f5]'}`}><Icon size={19} /><span>{label as string}</span>{label === 'Couples' && <span className="ml-auto rounded-full bg-[#ffdfeb] px-1.5 py-0.5 text-[10px] text-[#e65d83]">NEW</span>}</button>)}
           </nav>
           <div className="mt-auto rounded-3xl bg-gradient-to-br from-[#fff0f3] to-[#f0eaff] p-4"><Sparkles className="mb-3 text-[#a26bfa]" size={20}/><p className="text-sm font-extrabold">Make your entrance unforgettable</p><p className="mt-1 text-xs leading-5 text-[#8d8193]">Unlock a special arrival effect.</p><button onClick={() => notify('VIP shop is opening soon')} className="mt-3 text-xs font-bold text-[#8857db]">Explore VIP <ChevronRight className="inline" size={14}/></button></div>
           <button onClick={() => notify('Profile settings')} className="mt-6 flex items-center gap-3 border-t border-[#f3e9e7] pt-5 text-left"><img src={avatars[0]} alt="Your profile" className="size-9 rounded-full object-cover"/><div><p className="text-xs font-extrabold">Aarav Mehta</p><p className="text-[10px] text-[#a098a4]">Level 18 · Charm 4.2k</p></div><MoreHorizontal className="ml-auto text-[#aaa0ad]" size={17}/></button>
@@ -107,7 +117,7 @@ export default function Page() {
           {active !== 'Home' && <SectionPage active={active} notify={notify} />}
         </section>
       </div>
-      <nav className="sticky bottom-0 z-20 flex items-center justify-around border-t border-[#f3e9e7] bg-white/95 px-4 py-3 backdrop-blur lg:hidden">{[[Home,'Home'],[Users,'Discover'],[Gamepad2,'Games'],[Heart,'Couples'],[Trophy,'Rankings']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex flex-col items-center gap-1 text-[10px] font-bold ${active === label ? 'text-[#f35f83]' : 'text-[#aaa0aa]'}`}><Icon size={19}/>{label as string}</button>)}</nav>
+      <nav className="sticky bottom-0 z-20 flex items-center justify-around border-t border-[#f3e9e7] bg-white/95 px-4 py-3 backdrop-blur lg:hidden">{[[Home,'Home'],[Users,'Discover'],[Gamepad2,'Games'],[Heart,'Couples'],[Trophy,'Rankings'],[CircleUserRound,'Profile']].map(([Icon,label]) => <button key={label as string} onClick={() => setActive(label as string)} className={`flex flex-col items-center gap-1 text-[10px] font-bold ${active === label ? 'text-[#f35f83]' : 'text-[#aaa0aa]'}`}><Icon size={19}/>{label as string}</button>)}</nav>
       {toast && <div role="status" className="fixed bottom-20 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#30253f] px-5 py-3 text-xs font-bold text-white shadow-xl lg:bottom-8"><Sparkles size={14} className="text-[#ffb4c5]"/>{toast}<button onClick={() => setToast('')} aria-label="Dismiss"><X size={14}/></button></div>}
     </main>
   )
