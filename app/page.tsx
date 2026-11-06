@@ -20,14 +20,10 @@ const rooms = [
 
 const games = [
   { name: "Who's the Spy", label: 'Deduction party', icon: Search, color: 'bg-[#e9f5ff]', text: 'text-[#3276c7]' },
-  { name: 'Paint to Hide', label: 'Creative challenge', icon: Palette, color: 'bg-[#fff0e2]', text: 'text-[#e97932]' },
-  { name: "Trickster's Cafe", label: 'Social strategy', icon: WandSparkles, color: 'bg-[#fff0f4]', text: 'text-[#d84f79]' },
-  { name: 'Hide & Seek', label: 'Quick party game', icon: Users, color: 'bg-[#eaf8ed]', text: 'text-[#399365]' },
-  { name: 'Space Werewolf', label: 'Mystery lobby', icon: Sparkles, color: 'bg-[#f0eaff]', text: 'text-[#7654d9]' },
-  { name: 'Oh My Card', label: 'Card battle', icon: Gift, color: 'bg-[#fff8de]', text: 'text-[#b48a20]' },
+  { name: 'Mic Grab', label: 'Pass the spotlight', icon: Mic2, color: 'bg-[#fff0e2]', text: 'text-[#e97932]' },
+  { name: 'UNO', label: 'Fast card battles', icon: Gamepad2, color: 'bg-[#fff0f4]', text: 'text-[#d84f79]' },
   { name: 'Ludo', label: 'Play with friends', icon: Dice5, color: 'bg-[#f0eaff]', text: 'text-[#7654d9]' },
-  { name: 'Draw & Guess', label: 'Show your talent', icon: Palette, color: 'bg-[#e9f8ef]', text: 'text-[#3a9d68]' },
-]
+  ]
 
 const profileModules = [
   { title: 'Edit avatar', detail: 'Outfits, frames and entrance effects', icon: WandSparkles, tone: 'from-[#ffe1e9] to-[#fff0f4]', accent: 'text-[#ef6687]' },
