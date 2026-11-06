@@ -9,7 +9,6 @@ import { CharmBadge } from "@/components/SeatFrame";
 import { activeLevel } from "@/lib/levels";
 import { useDebouncedCallback } from "@/hooks/useDebouncedCallback";
 
-
 type Member = {
   id: string;
   name: string;
@@ -133,10 +132,8 @@ export function RoomMemberRanking({
         { event: "INSERT", schema: "public", table: "gift_events", filter: `room_id=eq.${roomId}` },
         () => reload(),
       )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "family_members" },
-        () => reload(),
+      .on("postgres_changes", { event: "*", schema: "public", table: "family_members" }, () =>
+        reload(),
       )
       // chat messages and room joins award activity points through triggers
       .on(
@@ -149,7 +146,6 @@ export function RoomMemberRanking({
       void supabase.removeChannel(ch);
     };
   }, [roomId, reload]);
-
 
   const ranked = useMemo(() => {
     const copy = [...members];
@@ -207,7 +203,7 @@ export function RoomMemberRanking({
         </div>
       ) : ranked.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-foreground">
-          No one is on a mic seat right now.
+          No live members in this room right now.
         </p>
       ) : (
         <ul className="max-h-[46vh] space-y-2 overflow-y-auto pr-1">

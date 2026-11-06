@@ -146,6 +146,20 @@ function RoomPage() {
     },
   });
 
+  const presenceQuery = useQuery({
+    queryKey: ["room-presence", roomId],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("room_presence")
+        .select("user_id")
+        .eq("room_id", roomId);
+      if (error) throw error;
+      return (data ?? []) as { user_id: string }[];
+    },
+    refetchInterval: 10000,
+  });
+
   const messagesQuery = useQuery({
     queryKey: ["messages", roomId],
     enabled: !!user,
@@ -190,6 +204,16 @@ function RoomPage() {
 
   const room = roomQuery.data;
   const seats = useMemo(() => seatsQuery.data ?? [], [seatsQuery.data]);
+  const memberIds = useMemo(
+    () =>
+      [
+        ...new Set([
+          ...seats.map((seat) => seat.user_id),
+          ...(presenceQuery.data ?? []).map((presence) => presence.user_id),
+        ]),
+      ].filter((id): id is string => !!id),
+    [presenceQuery.data, seats],
+  );
   const mySeat = seats.find((s) => s.user_id === user?.id) ?? null;
   const isHost = !!room && room.host_id === user?.id;
   const canSpeak = !!mySeat && !mySeat.is_muted && micOn;
@@ -957,7 +981,10 @@ function RoomPage() {
       <Dialog open={!!giftTarget} onOpenChange={(o) => !o && setGiftTarget(null)}>
         <DialogContent className="top-auto bottom-0 translate-y-0 rounded-b-none rounded-t-[2rem] p-5 sm:top-[50%] sm:bottom-auto sm:translate-y-[-50%] sm:rounded-2xl sm:p-6">
           <DialogHeader>
-            <DialogTitle>Gift for {giftTarget?.name ?? "player"}</DialogTitle>
+            <DialogTitle>
+              Gift for {giftTarget?.name ?? "player"}
+              {giftTarget?.id === user?.id ? " (yourself)" : ""}
+            </DialogTitle>
           </DialogHeader>
           <div className="flex gap-4 overflow-x-auto pb-1 text-sm font-bold">
             {["all", ...giftTiers].map((t) => (
@@ -1074,7 +1101,7 @@ function RoomPage() {
           <RoomHubPanel
             roomId={roomId}
             initialTab={hubTab}
-            memberIds={seats.map((s) => s.user_id).filter((id): id is string => !!id)}
+            memberIds={memberIds}
             onGift={(u) => {
               setHubOpen(false);
               setGiftTarget(u);
