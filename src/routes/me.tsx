@@ -3,8 +3,6 @@ import {
   ChevronRight,
   Gem,
   Store,
-  Shirt,
-  Home as HomeIcon,
   Images,
   Trophy,
   Eye,
@@ -18,6 +16,7 @@ import {
   Users,
   ShieldCheck,
   Loader2,
+  Coins,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { initials } from "@/lib/rooms";
@@ -47,10 +46,10 @@ export const Route = createFileRoute("/me")({
 });
 
 const SHORTCUTS = [
-  { label: "VIP Center", icon: Gem, tint: "from-gold/45 to-accent/40", to: "/shop" as const },
+  { label: "VIP Center", icon: Gem, tint: "from-gold/45 to-accent/40", to: "/vip" as const },
+  { label: "Wallet", icon: Coins, tint: "from-gold/35 to-primary/25", to: "/wallet" as const },
   { label: "Shop", icon: Store, tint: "from-accent/40 to-primary/25", to: "/shop" as const },
-  { label: "PLAY Show", icon: Shirt, tint: "from-chart-4/35 to-primary/25", to: "/games" as const },
-  { label: "My Home", icon: HomeIcon, tint: "from-gold/40 to-accent/35", to: "/cp" as const },
+  { label: "Family", icon: Users, tint: "from-gold/40 to-accent/35", to: "/family" as const },
 ];
 
 function MePage() {
@@ -90,14 +89,19 @@ function MePage() {
       <div className="bg-gradient-to-b from-primary/15 to-transparent px-4 pb-6 pt-6">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           <Avatar className="h-20 w-20 rounded-2xl">
-            <AvatarImage src={profile?.avatar_url ?? undefined} alt={profile?.display_name ?? "Profile"} />
+            <AvatarImage
+              src={profile?.avatar_url ?? undefined}
+              alt={profile?.display_name ?? "Profile"}
+            />
             <AvatarFallback className="rounded-2xl text-xl">
               {initials(profile?.display_name ?? "Player")}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
             <p className="truncate text-lg font-bold">{profile?.display_name ?? "Guest"}</p>
-            <p className="text-xs text-muted-foreground">🪙 {profile?.coins?.toLocaleString() ?? 0} coins</p>
+            <p className="text-xs text-muted-foreground">
+              🪙 {profile?.coins?.toLocaleString() ?? 0} coins
+            </p>
             <div className="mt-2 flex items-center gap-2">
               <span className="text-xs font-bold">Lv.{level}</span>
               <Progress value={progress} className="h-2 flex-1" />
@@ -114,7 +118,9 @@ function MePage() {
         <div className="mx-auto mt-6 grid max-w-lg grid-cols-4 gap-2 text-center text-xs font-medium">
           {SHORTCUTS.map((s) => (
             <Link key={s.label} to={s.to} className="flex flex-col items-center gap-1.5">
-              <span className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${s.tint}`}>
+              <span
+                className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${s.tint}`}
+              >
                 <s.icon className="h-5 w-5 text-primary-foreground" />
               </span>
               {s.label}
