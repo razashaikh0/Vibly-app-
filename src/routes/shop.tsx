@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Backpack, Coins, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { RingArt, DecorArt } from "@/components/RingArt";
 
@@ -48,10 +49,38 @@ const CATEGORIES: Category[] = [
       {
         title: "Rings",
         items: [
-          { name: "Unicorn Ring", emoji: "🦄", price: 131466, tint: "bg-violet-100", art: "ring", artStyle: "unicorn" },
-          { name: "Heart Ring", emoji: "💍", price: 41900, tint: "bg-pink-100", art: "ring", artStyle: "heart" },
-          { name: "Crystal Ring", emoji: "💠", price: 30000, tint: "bg-sky-100", art: "ring", artStyle: "crystal" },
-          { name: "Half Moon Ring", emoji: "💫", price: 11111, tint: "bg-blue-100", art: "ring", artStyle: "emerald" },
+          {
+            name: "Unicorn Ring",
+            emoji: "🦄",
+            price: 131466,
+            tint: "bg-violet-100",
+            art: "ring",
+            artStyle: "unicorn",
+          },
+          {
+            name: "Heart Ring",
+            emoji: "💍",
+            price: 41900,
+            tint: "bg-pink-100",
+            art: "ring",
+            artStyle: "heart",
+          },
+          {
+            name: "Crystal Ring",
+            emoji: "💠",
+            price: 30000,
+            tint: "bg-sky-100",
+            art: "ring",
+            artStyle: "crystal",
+          },
+          {
+            name: "Half Moon Ring",
+            emoji: "💫",
+            price: 11111,
+            tint: "bg-blue-100",
+            art: "ring",
+            artStyle: "emerald",
+          },
         ],
       },
       {
@@ -74,20 +103,83 @@ const CATEGORIES: Category[] = [
       {
         title: "Frames",
         items: [
-          { name: "Brave of Love", emoji: "🕊️", price: "Activity", tint: "bg-violet-100", art: "decor", artStyle: "royal" },
-          { name: "Knight of Love", emoji: "⚔️", price: "Activity", tint: "bg-indigo-100", art: "decor", artStyle: "crystal" },
-          { name: "Dragon War", emoji: "🐉", price: "Activity", tint: "bg-sky-100", art: "decor", artStyle: "emerald" },
-          { name: "Rainbow Unicorn", emoji: "🌈", price: 600, tint: "bg-cyan-100", art: "decor", artStyle: "unicorn" },
-          { name: "Foxie", emoji: "🦊", price: 600, tint: "bg-green-100", art: "decor", artStyle: "heart" },
-          { name: "Iced Bubble Tea", emoji: "🧋", price: 600, tint: "bg-blue-100", art: "decor", artStyle: "crystal" },
+          {
+            name: "Brave of Love",
+            emoji: "🕊️",
+            price: "Activity",
+            tint: "bg-violet-100",
+            art: "decor",
+            artStyle: "royal",
+          },
+          {
+            name: "Knight of Love",
+            emoji: "⚔️",
+            price: "Activity",
+            tint: "bg-indigo-100",
+            art: "decor",
+            artStyle: "crystal",
+          },
+          {
+            name: "Dragon War",
+            emoji: "🐉",
+            price: "Activity",
+            tint: "bg-sky-100",
+            art: "decor",
+            artStyle: "emerald",
+          },
+          {
+            name: "Rainbow Unicorn",
+            emoji: "🌈",
+            price: 600,
+            tint: "bg-cyan-100",
+            art: "decor",
+            artStyle: "unicorn",
+          },
+          {
+            name: "Foxie",
+            emoji: "🦊",
+            price: 600,
+            tint: "bg-green-100",
+            art: "decor",
+            artStyle: "heart",
+          },
+          {
+            name: "Iced Bubble Tea",
+            emoji: "🧋",
+            price: 600,
+            tint: "bg-blue-100",
+            art: "decor",
+            artStyle: "crystal",
+          },
         ],
       },
       {
         title: "Mount",
         items: [
-          { name: "Cloud Rider", emoji: "☁️", price: 3000, tint: "bg-sky-100", art: "decor", artStyle: "crystal" },
-          { name: "Flame Tiger", emoji: "🐅", price: 8800, tint: "bg-orange-100", art: "decor", artStyle: "heart" },
-          { name: "Star Whale", emoji: "🐋", price: 12000, tint: "bg-indigo-100", art: "decor", artStyle: "royal" },
+          {
+            name: "Cloud Rider",
+            emoji: "☁️",
+            price: 3000,
+            tint: "bg-sky-100",
+            art: "decor",
+            artStyle: "crystal",
+          },
+          {
+            name: "Flame Tiger",
+            emoji: "🐅",
+            price: 8800,
+            tint: "bg-orange-100",
+            art: "decor",
+            artStyle: "heart",
+          },
+          {
+            name: "Star Whale",
+            emoji: "🐋",
+            price: 12000,
+            tint: "bg-indigo-100",
+            art: "decor",
+            artStyle: "royal",
+          },
         ],
       },
     ],
@@ -110,9 +202,30 @@ const CATEGORIES: Category[] = [
       {
         title: "Entrance Effects",
         items: [
-          { name: "Royal Carpet", emoji: "🟥", price: 1200, tint: "bg-red-100", art: "decor", artStyle: "heart" },
-          { name: "Petal Storm", emoji: "🌸", price: 1200, tint: "bg-pink-100", art: "decor", artStyle: "unicorn" },
-          { name: "Thunder Entry", emoji: "⚡", price: 1500, tint: "bg-violet-100", art: "decor", artStyle: "royal" },
+          {
+            name: "Royal Carpet",
+            emoji: "🟥",
+            price: 1200,
+            tint: "bg-red-100",
+            art: "decor",
+            artStyle: "heart",
+          },
+          {
+            name: "Petal Storm",
+            emoji: "🌸",
+            price: 1200,
+            tint: "bg-pink-100",
+            art: "decor",
+            artStyle: "unicorn",
+          },
+          {
+            name: "Thunder Entry",
+            emoji: "⚡",
+            price: 1500,
+            tint: "bg-violet-100",
+            art: "decor",
+            artStyle: "royal",
+          },
         ],
       },
     ],
@@ -134,7 +247,13 @@ const CATEGORIES: Category[] = [
         items: [
           { name: "600 Gold Packets", emoji: "🧧", price: "₹99", tint: "bg-red-100" },
           { name: "1800 Gold Packets", emoji: "🧧", price: "₹299", tint: "bg-red-100" },
-          { name: "3000 Gold Packets", emoji: "🧧", price: "₹499", tint: "bg-red-100", badge: "Gift broadcast" },
+          {
+            name: "3000 Gold Packets",
+            emoji: "🧧",
+            price: "₹499",
+            tint: "bg-red-100",
+            badge: "Gift broadcast",
+          },
         ],
       },
     ],
@@ -157,9 +276,30 @@ const CATEGORIES: Category[] = [
       {
         title: "Mic Animations",
         items: [
-          { name: "Neon Pulse", emoji: "🔊", price: 500, tint: "bg-violet-100", art: "decor", artStyle: "unicorn" },
-          { name: "Heart Beat", emoji: "💗", price: 500, tint: "bg-pink-100", art: "decor", artStyle: "heart" },
-          { name: "Fire Ring", emoji: "🔥", price: 500, tint: "bg-orange-100", art: "decor", artStyle: "heart" },
+          {
+            name: "Neon Pulse",
+            emoji: "🔊",
+            price: 500,
+            tint: "bg-violet-100",
+            art: "decor",
+            artStyle: "unicorn",
+          },
+          {
+            name: "Heart Beat",
+            emoji: "💗",
+            price: 500,
+            tint: "bg-pink-100",
+            art: "decor",
+            artStyle: "heart",
+          },
+          {
+            name: "Fire Ring",
+            emoji: "🔥",
+            price: 500,
+            tint: "bg-orange-100",
+            art: "decor",
+            artStyle: "heart",
+          },
         ],
       },
     ],
@@ -170,7 +310,15 @@ const CATEGORIES: Category[] = [
     sections: [
       {
         title: "Supplies",
-        items: [{ name: "Normal Chest", emoji: "🧰", price: 5000, tint: "bg-sky-100", badge: "Chief/Deputy" }],
+        items: [
+          {
+            name: "Normal Chest",
+            emoji: "🧰",
+            price: 5000,
+            tint: "bg-sky-100",
+            badge: "Chief/Deputy",
+          },
+        ],
       },
       {
         title: "Gold",
@@ -189,6 +337,15 @@ function ShopPage() {
   const [active, setActive] = useState(CATEGORIES[0]!.key);
   const category = CATEGORIES.find((c) => c.key === active)!;
 
+  const buyRing = async (name: string) => {
+    const { error } = await supabase.rpc("buy_ring", { _ring_name: name });
+    if (error) {
+      toast.error(error.message.includes("coins") ? "Not enough coins" : error.message);
+      return;
+    }
+    toast.success(`${name} bought. Open My Home to propose with it.`);
+  };
+
   return (
     <div className="min-h-screen pb-[calc(var(--nav-height)+env(safe-area-inset-bottom)+1.5rem)]">
       <header className="glass sticky top-0 z-20 flex items-center gap-2 px-3 py-3">
@@ -198,7 +355,12 @@ function ShopPage() {
           </Link>
         </Button>
         <h1 className="flex-1 text-center text-lg font-bold">Shop</h1>
-        <Button size="icon" variant="ghost" aria-label="Inventory" onClick={() => toast("Your inventory is empty")}>
+        <Button
+          size="icon"
+          variant="ghost"
+          aria-label="Inventory"
+          onClick={() => toast("Your inventory is empty")}
+        >
           <Backpack className="h-5 w-5 text-gold" />
         </Button>
       </header>
@@ -231,7 +393,9 @@ function ShopPage() {
               type="button"
               onClick={() => setActive(c.key)}
               className={`whitespace-nowrap border-b-2 pb-1 transition-colors ${
-                active === c.key ? "border-primary text-primary" : "border-transparent text-muted-foreground"
+                active === c.key
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground"
               }`}
             >
               {c.label}
@@ -251,7 +415,10 @@ function ShopPage() {
                 <button
                   key={item.name}
                   type="button"
-                  onClick={() => toast.success(`${item.name} added to wishlist`)}
+                  onClick={() => {
+                    if (item.art === "ring") void buyRing(item.name);
+                    else toast.success(`${item.name} added to wishlist`);
+                  }}
                   className="text-left"
                 >
                   <span
@@ -270,9 +437,13 @@ function ShopPage() {
                       </span>
                     ) : null}
                   </span>
-                  <span className="mt-1.5 block text-xs font-medium leading-tight">{item.name}</span>
+                  <span className="mt-1.5 block text-xs font-medium leading-tight">
+                    {item.name}
+                  </span>
                   <span className="mt-0.5 block text-xs font-bold text-gold">
-                    {typeof item.price === "number" ? `🪙 ${item.price.toLocaleString()}` : item.price}
+                    {typeof item.price === "number"
+                      ? `🪙 ${item.price.toLocaleString()}`
+                      : item.price}
                   </span>
                 </button>
               ))}
