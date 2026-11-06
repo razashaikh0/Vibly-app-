@@ -156,7 +156,7 @@ const socialModules = [
 }
 
 export default function Page() {
-  const [active, setActive] = useState('Home')
+  const [active, setActive] = useState('Voice Room')
   const [toast, setToast] = useState('')
   const notify = (message: string) => { setToast(message); setTimeout(() => setToast(''), 2200) }
 
